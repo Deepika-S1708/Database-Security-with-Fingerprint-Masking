@@ -1,0 +1,4084 @@
+Admin
+
+Adminlogin
+package admin;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import database.DatabaseStatement;
+public class adminlogin extends HttpServlet {
+Connection connection = null;
+PreparedStatement preparedStatement = null;
+DatabaseStatement databaseStatement = new DatabaseStatement();
+public void doGet(HttpServletRequest request,
+HttpServletResponse response)throws ServletException,
+IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+String status = "";
+String username=request.getParameter("username");
+String password=request.getParameter("password");
+try{
+connection = (Connection)
+
+getServletContext().getAttribute(
+
+"connection");
+if(!"".equalsIgnoreCase(username)&&!"".equalsIgnoreCase(pas
+sword))
+{
+preparedStatement =
+
+connection.prepareStatement(databaseStatement.checkUserName())
+;
+
+System.out.println("check username working");
+preparedStatement.setString(1, username);
+preparedStatement.setString(2, password);
+ResultSet resultSet =
+
+preparedStatement.executeQuery();
+
+boolean b = resultSet.next();
+if(b){
+HttpSession hs=request.getSession(true);
+hs.setAttribute("username",
+
+resultSet.getString("username"));
+
+hs.setAttribute("userid",
+
+resultSet.getString("userid"));
+
+status="AUTHORISED USER";
+request.setAttribute("status", status);
+request.setAttribute("username",
+
+resultSet.getString("username"));
+
+request.setAttribute("userid",
+
+resultSet.getString("userid"));
+
+RequestDispatcher rd =
+
+request.getRequestDispatcher("home.jsp");
+/* RequestDispatcher rd =
+request.getRequestDispatcher("AdminSucess.jsp");
+*/ rd.forward(request, response);
+
+}else
+{
+status="Invalid User";
+request.setAttribute("status", status);
+RequestDispatcher rd =
+
+request.getRequestDispatcher("index.jsp");
+
+rd.forward(request, response);
+}
+}
+else
+{
+status="Invalid User";
+request.setAttribute("status", status);
+RequestDispatcher rd =
+
+request.getRequestDispatcher("index.jsp");
+
+rd.forward(request, response);
+}
+}catch(Exception e)
+{
+e.printStackTrace();
+}
+}
+}
+Binary
+package admin;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import java.sql.ResultSet;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import database.DatabaseStatement;
+public class adminlogin extends HttpServlet {
+Connection connection = null;
+PreparedStatement preparedStatement = null;
+DatabaseStatement databaseStatement = new DatabaseStatement();
+public void doGet(HttpServletRequest request,
+HttpServletResponse response)throws ServletException,
+IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+String status = "";
+String username=request.getParameter("username");
+String password=request.getParameter("password");
+try{
+connection = (Connection)
+
+getServletContext().getAttribute(
+
+"connection");
+if(!"".equalsIgnoreCase(username)&&!"".equalsIgnoreCase(pas
+sword))
+{
+preparedStatement =
+
+connection.prepareStatement(databaseStatement.checkUserName())
+;
+
+System.out.println("check username working");
+preparedStatement.setString(1, username);
+preparedStatement.setString(2, password);
+ResultSet resultSet =
+
+preparedStatement.executeQuery();
+
+boolean b = resultSet.next();
+if(b){
+HttpSession hs=request.getSession(true);
+hs.setAttribute("username",
+
+resultSet.getString("username"));
+
+hs.setAttribute("userid",
+
+resultSet.getString("userid"));
+
+status="AUTHORISED USER";
+request.setAttribute("status", status);
+request.setAttribute("username",
+
+resultSet.getString("username"));
+
+request.setAttribute("userid",
+
+resultSet.getString("userid"));
+
+RequestDispatcher rd =
+
+request.getRequestDispatcher("home.jsp");
+/* RequestDispatcher rd =
+request.getRequestDispatcher("AdminSucess.jsp");
+*/ rd.forward(request, response);
+
+}else
+{
+status="Invalid User";
+request.setAttribute("status", status);
+RequestDispatcher rd =
+
+request.getRequestDispatcher("index.jsp");
+
+rd.forward(request, response);
+}
+}
+else
+{
+status="Invalid User";
+request.setAttribute("status", status);
+RequestDispatcher rd =
+
+request.getRequestDispatcher("index.jsp");
+
+rd.forward(request, response);
+}
+}catch(Exception e)
+{
+e.printStackTrace();
+}
+}
+}
+Datapartition
+package admin;
+import hashfuction.Md5hashfunction;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.util.Vector;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+
+import javax.servlet.http.HttpServletResponse;
+public class datapartition extends HttpServlet {
+Connection connection ;
+int by=0;
+Statement stmt ;
+String ks="1as"; //secret key
+Md5hashfunction md=new Md5hashfunction();
+Vector heading=new Vector();
+static Vector s0=new Vector();
+static Vector s1=new Vector();
+static Vector s2=new Vector();
+static Vector s3=new Vector();
+static Vector primaykeypartitionvec=new Vector();
+BigInteger ZERO = new BigInteger ("0");
+BigInteger ONE = new BigInteger ("1");
+BigInteger TWO= new BigInteger ("2");
+BigInteger THREE = new BigInteger ("3");
+
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)throws ServletException,
+IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+try{
+s0=new Vector();
+s1=new Vector();
+s2=new Vector();
+s3=new Vector();
+primaykeypartitionvec=new Vector();
+
+connection = (Connection)
+getServletContext().getAttribute("connection");
+stmt = connection.createStatement();
+System.out.println("connection exe");
+Vector<Vector> list = new Vector <Vector> ();
+String sql="select * from infotechdb";
+ResultSet rs = stmt.executeQuery(sql);
+ResultSetMetaData rm = rs.getMetaData();
+Vector<String> metatemp = new Vector<String> ();
+int count = rm.getColumnCount();
+for(int i = 1; i <= count; i++){
+metatemp.add(rm.getColumnName(i));
+}
+list.add(metatemp);
+Vector temp ;
+
+while(rs.next())
+{
+temp = new Vector();
+String sno=rs.getString("SNO");
+
+String hashfun1=md.MD5(ks+sno);
+String concathash=ks+hashfun1;
+String hashfun2=md.MD5(concathash);
+BigInteger bi = new BigInteger(hashfun2, 16);
+BigInteger Even_Value=bi.mod(new
+
+BigInteger("4"));
+
+if(Even_Value.equals(ZERO)){
+s0.add(sno);
+}
+else if(Even_Value.equals(ONE)){
+s1.add(sno);
+}
+else if(Even_Value.equals(TWO)){
+s2.add(sno);
+}
+else if(Even_Value.equals(THREE)){
+s3.add(sno);
+}
+}
+
+primaykeypartitionvec.add(s0);
+primaykeypartitionvec.add(s1);
+primaykeypartitionvec.add(s2);
+primaykeypartitionvec.add(s3);
+
+request.setAttribute("PARTITION", "TUPLE GROUPING HAS
+
+BEEN ALLOCATED");
+
+request.setAttribute("list", primaykeypartitionvec);
+RequestDispatcher rd =
+
+request.getRequestDispatcher("Adminpartitionprocess.jsp");
+
+rd.forward(request, response);
+}
+
+catch(Exception e){
+e.printStackTrace();
+}
+
+}
+
+}
+
+Datasetwatermark
+package admin;
+import hashfuction.Md5hashfunction;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.util.Vector;
+import java.sql.ResultSet;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class datasetwatermark extends HttpServlet {
+Connection connection ;
+int by=0;
+Statement stmt ;
+String ks="1as"; //secret key
+Md5hashfunction md=new Md5hashfunction();
+Vector s0copy;//=new Vector();
+Vector s1copy;//=new Vector();
+Vector s2copy;//=new Vector();
+Vector s3copy;//=new Vector();
+static Vector<Vector> partitiongroupprimarykeyvector=new
+Vector();
+static Vector<Vector> PartitiongroupThresolsve=new
+Vector<Vector>();
+Double totalcount;
+Double summazion=0.0;
+Double yearcount;
+Double yearinti=0.0;
+Double activeempcount;
+Double activeempinti=0.0;
+Double benchmarkempcount;
+Double benchmarkempinti=0.0;
+
+Double totempcount;
+Double totempinti=0.0;
+Double projectcountcount;
+Double projectcountinti=0.0;
+Double tieupclientscount;
+Double tieupclientsinti=0.0;
+Double brancescount;
+Double brancesinti=0.0;
+Double rentalexpcount;
+Double rentalexpinti=0.0;
+Double salryamountcount;
+Double salryamountinti=0.0;
+Double otherexpensescount;
+Double otherexpensesexpinti=0.0;
+Double annualtocount;
+Double annualtoexpinti=0.0;
+Double profitlosscount;
+Double profitlossinti=0.0;
+
+datapartition dp=new datapartition();
+float yearconfidentalfactor=0.54f;
+float activeempconfidentalfactor=0.2f;
+float benchmarkempconfidentalfactor=0.3f;
+float totempconfidentalfactor=0.5f;
+float projectcountconfidentalfactor=0.21f;
+float tieupclientsconfidentalfactor=0.14f;
+float brancesconfidentalfactor=0.56f;
+float rentalexpconfidentalfactor=0.78f;
+float salryamountconfidentalfactor=0.84f;
+float otherexpensesconfidentalfactor=0.93f;
+float annualtoconfidentalfactor=0.65f;
+float profitlossconfidentalfactor=0.47f;
+
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)
+
+throws ServletException, IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+try{
+
+connection = (Connection)
+getServletContext().getAttribute("connection");
+stmt = connection.createStatement();
+System.out.println("connection exe");
+Vector<Vector> list = new Vector <Vector> ();
+Vector watermarkingbitvec;
+s0copy=datapartition.s0;
+s1copy=datapartition.s1;
+
+s2copy=datapartition.s2;
+s3copy=datapartition.s3;
+partitiongroupprimarykeyvector=new Vector();
+partitiongroupprimarykeyvector.add(s0copy);
+partitiongroupprimarykeyvector.add(s1copy);
+partitiongroupprimarykeyvector.add(s2copy);
+partitiongroupprimarykeyvector.add(s3copy);
+System.out.println("vector adding process completed");
+PartitiongroupThresolsve=new Vector<Vector>();
+for(int
+
+i=0;i<partitiongroupprimarykeyvector.size();i++){
+
+System.out.println("for loop entered ");
+Vector temp=new Vector();
+Vector <Double>Thresolsve=new Vector<Double>();
+temp=partitiongroupprimarykeyvector.get(i);
+for(int j=0;j<temp.size();j++){
+String sql1="select * from infotechdb where
+
+SNO="+temp.get(j);
+
+ResultSet rs = stmt.executeQuery(sql1);
+while(rs.next())
+{
+String year=rs.getString("YEAR");
+String activeemp=rs.getString("STAFF");
+String
+
+benchmarkemp=rs.getString("VECHICLE");
+
+String totemp=rs.getString("MATERIAL");
+String
+projectcount=rs.getString("DAMAGE");
+String
+
+tieupclients=rs.getString("CUSTOMER");
+
+String brances=rs.getString("BRANCHES");
+String
+
+rentalexp=rs.getString("RENTALEXPENSES");
+
+String
+
+salryamount=rs.getString("SALARYAMOUNT_PA");
+
+String
+
+otherexpenses=rs.getString("OTHER_EXPENSES_PA");
+
+String
+
+annualto=rs.getString("ANNUALTURNOVER");
+
+String
+
+profitloss=rs.getString("PROFIT/LOSS");
+
+yearcount=Double.valueOf(year);
+yearinti=yearinti+yearcount;
+
+activeempcount=Double.valueOf(activeemp);
+activeempinti=activeempinti+activeempcount;
+
+benchmarkempcount=Double.valueOf(benchmarkemp);
+benchmarkempinti=benchmarkempinti+benchmarkempcount;
+totempcount=Double.valueOf(totemp);
+totempinti=totempinti+totempcount;
+
+projectcountcount=Double.valueOf(projectcount);
+projectcountinti=projectcountinti+projectcountcount;
+
+tieupclientscount=Double.valueOf(tieupclients);
+tieupclientsinti=tieupclientsinti+tieupclientscount;
+
+brancescount=Double.valueOf(brances);
+brancesinti=brancesinti+brancescount;
+
+rentalexpcount=Double.valueOf(rentalexp);
+rentalexpinti=rentalexpinti+rentalexpcount;
+
+salryamountcount=Double.valueOf(salryamount);
+salryamountinti=
+salryamountinti+salryamountcount;
+
+otherexpensescount=Double.valueOf(otherexpenses);
+otherexpensesexpinti=otherexpensesexpinti+otherexpensescount;
+annualtocount=Double.valueOf(annualto);
+
+annualtoexpinti=annualtoexpinti+annualtocount;
+
+profitlosscount=Double.valueOf(annualto);
+profitlossinti=profitlossinti+profitlosscount;
+
+}
+}
+// out.println(i+" GROUP COMPLETED");
+/* out.println("total completed "+profitlossinti);
+
+System.out.println(i+" GROUP COMPLETED");
+System.out.println("\n total count is "+summazion);
+System.out.println("\n mean is
+
+"+summazion/temp.size());
+
+System.out.println("\n standard deviation is
+
+"+Math.sqrt(summazion/temp.size()));*/
+
+Double yearmean=yearinti/temp.size();
+Double yearsd=Math.sqrt(yearinti/temp.size());
+Double activempmean=activeempinti/temp.size();
+Double
+
+activeempsd=Math.sqrt(activeempinti/temp.size());
+
+Double
+
+benchmarkmean=benchmarkempinti/temp.size();
+
+Double
+
+benchmarksd=Math.sqrt(benchmarkempinti/temp.size());
+
+Double totempcountmean=totempinti/temp.size();
+Double
+
+totempsd=Math.sqrt(totempinti/temp.size());
+
+Double
+
+projectcountmean=projectcountinti/temp.size();
+
+Double
+
+projectcountsd=Math.sqrt(projectcountinti/temp.size());
+
+Double
+
+tiecupclinetsmean=tieupclientsinti/temp.size();
+
+Double
+
+tiecupclinetsd=Math.sqrt(tieupclientsinti/temp.size());
+Double branchesmean=brancesinti/temp.size();
+Double
+
+branchessd=Math.sqrt(brancesinti/temp.size());
+
+Double rentalexpmean=rentalexpinti/temp.size();
+Double
+
+rententalexpsd=Math.sqrt(rentalexpinti/temp.size());
+
+Double salarymean=salryamountinti/temp.size();
+Double
+
+salarysd=Math.sqrt(salryamountinti/temp.size());
+
+Double
+
+otherexpensesmean=otherexpensesexpinti/temp.size();
+
+Double
+
+otherexpensessd=Math.sqrt(otherexpensesexpinti/temp.size());
+
+Double
+
+annualexpensesmean=annualtoexpinti/temp.size();
+
+Double
+
+annualexpensessd=Math.sqrt(annualtoexpinti/temp.size());
+Double profitlossmean=profitlossinti/temp.size();
+Double
+
+profitlosssd=Math.sqrt(profitlossinti/temp.size());
+
+Double
+
+Thresoldyear=(yearconfidentalfactor*(yearmean))+(yearsd);
+
+Double
+
+Thresoldactiveemp=(activeempconfidentalfactor*(activempmean))+
+(activeempsd);
+Double
+
+Thresoldbenchmarkemp=(benchmarkempconfidentalfactor*(benchmark
+mean))+(benchmarksd);
+Double
+
+Thresoldtotemp=(totempconfidentalfactor*totempcountmean)+(tote
+mpsd);
+
+Double
+
+Thresoldprojectcount=(projectcountconfidentalfactor*(projectco
+untmean))+(projectcountsd);
+
+Double
+
+Thresoldtieupclients=(tieupclientsconfidentalfactor*(tiecupcli
+netsmean))+(tiecupclinetsd);
+
+Double
+
+Thresoldbrances=(brancesconfidentalfactor*(branchesmean))+(bra
+nchessd);
+
+Double
+
+Thresoldrentalexp=(rentalexpconfidentalfactor*(rentalexpmean))
++(rententalexpsd);
+Double
+
+Thresoldsalryamount=(salryamountconfidentalfactor*(salarymean))
++(salarysd);
+Double
+
+Thresoldotherexpenses=(otherexpensesconfidentalfactor*(otherex
+pensesmean))+(otherexpensessd);
+
+Double
+
+Thresoldannualto=(annualtoconfidentalfactor*(annualexpensesmea
+n))+(annualexpensessd);
+Double
+
+Thresoldprofitloss=(profitlossconfidentalfactor*(profitlossmea
+n))+(profitlosssd);
+
+Thresolsve.add(Thresoldyear);
+Thresolsve.add(Thresoldactiveemp);
+Thresolsve.add(Thresoldbenchmarkemp);
+Thresolsve.add(Thresoldtotemp);
+Thresolsve.add(Thresoldprojectcount);
+Thresolsve.add(Thresoldtieupclients);
+Thresolsve.add(Thresoldbrances);
+Thresolsve.add(Thresoldrentalexp);
+Thresolsve.add(Thresoldsalryamount);
+
+Thresolsve.add(Thresoldotherexpenses);
+Thresolsve.add(Thresoldannualto);
+Thresolsve.add(Thresoldprofitloss);
+PartitiongroupThresolsve.add(Thresolsve);
+//System.out.println("partition vector size is
+
+"+PartitiongroupThresolsve.size());
+
+}
+
+yearinti = 0.0;
+activeempinti = 0.0;
+benchmarkempinti = 0.0;
+totempinti = 0.0;
+projectcountinti = 0.0;
+tieupclientsinti = 0.0;
+brancesinti = 0.0;
+rentalexpinti = 0.0;
+salryamountinti = 0.0;
+otherexpensesexpinti = 0.0;
+annualtoexpinti = 0.0;
+profitlossinti = 0.0;
+if(s0copy.size()==0){
+request.setAttribute("PARTITION", "TUPLE GROUPING
+
+NOT YET PROCESSED");
+
+RequestDispatcher rd =
+request.getRequestDispatcher("Adminpartitionprocess.jsp");
+rd.forward(request, response);
+}
+else{
+request.setAttribute("PARTITION", "SECURE HASH
+
+HAS BEEN ALLOCATED");
+
+request.setAttribute("list",
+
+PartitiongroupThresolsve);
+
+RequestDispatcher rd =
+request.getRequestDispatcher("Adminpartitionprocess.jsp");
+rd.forward(request, response);
+}
+}
+
+catch(Exception e){
+e.printStackTrace();
+}
+}
+
+}
+Embedding
+package admin;
+import hashfuction.Hmac;
+import hashfuction.binaryconverstion;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Vector;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import database.DatabaseStatement;
+public class embedding extends HttpServlet {
+Connection connection;
+Statement stmt;
+static Vector utcvec = new Vector();
+Vector selectedtuplewatermarking;
+public static String usertesingstring="";
+int binarycount=0;
+///Global declaration
+String upbinaryyear="";
+String upactiveemp="";
+String upbenchmark="";
+String uptotemp="";
+String upprocount="";
+String uptieupcients="";
+String upbranches="";
+String uprentalexp="";
+String upsalaryamount="";
+String upotherexpenses="";
+String upannualturn="";
+String binaryprofitloss="";
+String upprofitloss="";
+int yearinteger=0;
+String upprofitglob="";
+publicstatic String binary="";
+public static String str="";
+Vector<Vector> embededvector =new Vector<Vector>();
+Vector<String> onevector =new Vector<String>();
+Vector<String> zerovector =new Vector<String>();
+
+Vector<String> anothervector =new Vector<String>();
+String globbinaryactiveemp="",globstrng="";
+//Global declaration
+PreparedStatement preparedStatement = null;
+DatabaseStatement databaseStatement = new DatabaseStatement();
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)
+
+throws ServletException, IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+out.println("embedding working");
+binaryconverstion bc=new binaryconverstion();
+String username=request.getParameter("username");
+String userid=request.getParameter("userid");
+try{
+utcvec=new Vector();
+connection = (Connection)
+getServletContext().getAttribute("connection");
+stmt = connection.createStatement();
+String UNIX_DATE_FORMAT = "EEE MMM dd HH:mm:ss zzz yyyy";
+Date now = new Date();
+SimpleDateFormat formatter = new
+SimpleDateFormat(UNIX_DATE_FORMAT);
+str=formatter.format(now);//
+System.out.println("time utc value in encoding process is
+"+str);
+binary=bc.toBinary(str.getBytes());
+request.setAttribute("utc",str);
+System.out.println("binary length is "+binary.length());
+utcvec.add(str);
+utcvec.add(binary);
+selectedtuplewatermarking=tupleseselection.selectedtupelwaterm
+arkingvectorpartition;
+if (binarycount < binary.length()) {
+for(int k=0;k<selectedtuplewatermarking.size();k++){
+Vector selectedtupevec=new Vector();
+selectedtupevec=(Vector)selectedtuplewatermarking.get(k);
+for(int l=0;l<selectedtupevec.size();l++){
+String pri=(String)selectedtupevec.get(l);
+int primarykey=Integer.parseInt(pri);
+String
+
+binaryprimarykey=Integer.toBinaryString(primarykey);
+
+String sql1="select * from infotechdb where
+
+SNO="+primarykey;
+
+ResultSet rs = stmt.executeQuery(sql1);
+while(rs.next())
+{
+if (binarycount < binary.length()) {
+// System.out.println("binarycount no is
+
+"+binarycount);
+
+String sno=rs.getString("SNO");
+String year = rs.getString("YEAR");
+//System.out.println("year in "+primarykey+" is
+
+"+year);
+
+int intyear = Integer.parseInt(year);
+String binaryyear = Integer.toBinaryString(intyear);
+
+///////////////////////
+usertesingstring=usertesingstring+sno+"*"+year;
+
+/////////////////////////////////////////
+String
+
+temp=binary.substring(binarycount,binarycount+1);
+
+if(temp.equals("1"))
+{
+float row=1.5f;
+float yearint =Integer.parseInt(year)%row;
+// yearinteger=(int)yearint;\
+if(yearint==0.5||yearint==-0.5){
+// System.out.println("condition works in
+
+year");
+
+yearint=1;
+}
+//System.out.println("\n year if "+yearint);
+upbinaryyear=(int)yearint+binaryyear;
+// System.out.println("\n year if up
+
+"+upbinaryyear);
+
+// System.out.println("\n year if "+yearint);
+}
+else{
+float row=-0.5f;
+float yearint =Integer.parseInt(year)%row;
+if(yearint==0.5||yearint==-0.5){
+// System.out.println("condition works in
+
+year");
+
+yearint=1;
+}
+// yearinteger=(int)yearint;
+upbinaryyear=(int)yearint+binaryyear;
+// System.out.println("\n year else "+yearint);
+// System.out.println("\n year if else
+
+"+upbinaryyear);
+}
+
+Statement stmtt = connection.createStatement();
+
+String sqlquery="UPDATE binarydb SET
+YEAR='"+upbinaryyear+"' where SNO='"+binaryprimarykey+"'";
+
+stmtt.executeUpdate(sqlquery);
+}
+if (binarycount+1 < binary.length()) {
+String activeemp = rs.getString("STAFF");
+int intactiveemp = Integer.parseInt(activeemp);
+String binaryactiveemp =
+
+Integer.toBinaryString(intactiveemp);
+///////////////////////
+usertesingstring=usertesingstring+"*"+activeemp;
+
+/////////////////////////////////////////
+String
+
+temp1=binary.substring(binarycount+1,binarycount+2);
+
+if(temp1.equals("1"))
+{
+float row=1.5f;
+float activeempint
+
+=Integer.parseInt(activeemp)%row;
+
+if(activeempint==0.5||activeempint==-0.5){
+//System.out.println("condition works
+
+in if activeemployess");
+
+activeempint=1;
+}
+
+upactiveemp=(int)activeempint+binaryactiveemp;
+
+// System.out.println("\n activeempint if
+
+"+activeempint);
+
+//out.println("upactiveemp if
+
+"+upactiveemp);
+
+}
+else{
+float row=-0.5f;
+float activeempint
+
+=Integer.parseInt(activeemp)%row;
+
+if(activeempint==0.5||activeempint==-0.5){
+//System.out.println("condition works
+
+in else activeemployess");
+
+activeempint=1;
+}
+
+upactiveemp=(int)activeempint+binaryactiveemp;
+
+// System.out.println("\n activeempint else
+
+"+activeempint);
+
+//out.println("upactiveemp else
+
+"+upactiveemp);
+}
+Statement stmtt = connection.createStatement();
+
+String sqlquery="UPDATE binarydb SET
+
+STAFF='"+upactiveemp+"' where SNO='"+binaryprimarykey+"'";
+
+stmtt.executeUpdate(sqlquery);
+}
+
+if (binarycount+2 < binary.length()) {
+String benchmarkemp=rs.getString("VECHICLE");
+int
+
+intbenchmarkemp=Integer.parseInt(benchmarkemp);
+
+String
+
+binarybenchmarkemp=Integer.toBinaryString(intbenchmarkemp);
+
+///////////////////////
+
+usertesingstring=usertesingstring+"*"+benchmarkemp;
+/////////////////////////////////////////
+String
+
+temp2=binary.substring(binarycount+2,binarycount+3);
+
+if(temp2.equals("1"))
+{
+float row=1.5f;
+float benchint
+
+=Integer.parseInt(benchmarkemp)%row;
+
+if(benchint==0.5||benchint==-0.5){
+// System.out.println("condition works
+
+in if BENCHMARKEMPLOYEES");
+
+benchint=1;
+}
+
+upbenchmark=(int)benchint+binarybenchmarkemp;
+
+// System.out.println("\n bench if
+
+"+benchint);
+
+}
+else{
+float row=-0.5f;
+float benchint
+
+=Integer.parseInt(benchmarkemp)%row;
+
+if(benchint==0.5||benchint==-0.5){
+// System.out.println("condition works
+
+in else BENCHMARKEMPLOYEES");
+benchint=1;
+}
+
+upbenchmark=(int)benchint+binarybenchmarkemp;
+
+//System.out.println("\n bench else
+
+"+benchint);
+}
+Statement stmtt = connection.createStatement();
+String sqlquery="UPDATE binarydb SET
+
+VECHICLE='"+upbenchmark+"' where SNO='"+binaryprimarykey+"'";
+
+stmtt.executeUpdate(sqlquery);
+}
+
+if (binarycount+3 < binary.length()) {
+String totemp=rs.getString("MATERIAL");
+int inttotemp = Integer.parseInt(totemp);
+String binarytotemp =
+
+Integer.toBinaryString(inttotemp);
+///////////////////////
+usertesingstring=usertesingstring+"*"+totemp;
+/////////////////////////////////////////
+String
+
+temp3=binary.substring(binarycount+3,binarycount+4);
+
+if(temp3.equals("1"))
+{
+float row=1.5f;
+float totint
+
+=Integer.parseInt(totemp)%row;
+
+if(totint==0.5||totint==-0.5){
+// System.out.println("condition works
+
+in if totint");
+
+totint=1;
+}
+//System.out.println("total int if is
+
+"+totint);
+
+uptotemp=(int)totint+binarytotemp;
+}
+else{
+float row=-0.5f;
+float totint
+
+=Integer.parseInt(totemp)%row;
+
+if(totint==0.5||totint==-0.5){
+// System.out.println("condition works
+
+in else totint");
+totint=1;
+}
+// System.out.println("total int else is
+
+"+totint);
+
+uptotemp=(int)totint+binarytotemp;
+}
+Statement stmtt = connection.createStatement();
+String sqlquery="UPDATE binarydb SET
+
+MATERIAL='"+uptotemp+"' where SNO='"+binaryprimarykey+"'";
+
+stmtt.executeUpdate(sqlquery);
+}
+
+if (binarycount+4 < binary.length()) {
+String projectcount=rs.getString("DAMAGE");
+int intprojectcount =
+
+Integer.parseInt(projectcount);
+
+String binaryprojectcount =
+
+Integer.toBinaryString(intprojectcount);
+
+///////////////////////
+usertesingstring=usertesingstring+"*"+projectcount;
+/////////////////////////////////////////
+String
+
+temp4=binary.substring(binarycount+4,binarycount+5);
+
+if(temp4.equals("1"))
+{
+float row=1.5f;
+float projcountint
+
+=Integer.parseInt(projectcount)%row;
+
+if(projcountint==0.5||projcountint==-0.5){
+// System.out.println("condition works
+
+in if projcountint");
+
+projcountint=1;
+}
+// System.out.println("project coutn if
+
+"+projcountint);
+upprocount=(int)projcountint+binaryprojectcount;
+
+}
+else{
+float row=-0.5f;
+float projcountint
+
+=Integer.parseInt(projectcount)%row;
+
+if(projcountint==0.5||projcountint==-0.5){
+// System.out.println("condition works
+
+in else projcountint");
+
+projcountint=1;
+}
+//System.out.println("project coutn else
+
+"+projcountint);
+upprocount=(int)projcountint+binaryprojectcount;
+
+}
+Statement stmtt = connection.createStatement();
+String sqlquery="UPDATE binarydb SET
+
+DAMAGE='"+upprocount+"' where SNO='"+binaryprimarykey+"'";
+
+stmtt.executeUpdate(sqlquery);
+}
+
+if (binarycount+5 < binary.length()) {
+String tieupclients=rs.getString("CUSTOMER");
+int inttieupclients =
+
+Integer.parseInt(tieupclients);
+
+String binarytieupclients =
+
+Integer.toBinaryString(inttieupclients);
+///////////////////////
+
+usertesingstring=usertesingstring+"*"+tieupclients;
+
+/////////////////////////////////////////
+String
+
+temp5=binary.substring(binarycount+5,binarycount+6);
+
+if(temp5.equals("1"))
+{
+float row=1.5f;
+float tieupclientsint
+
+=Integer.parseInt(tieupclients)%row;
+if(tieupclientsint==0.5||tieupclientsint==-0.5){
+
+// System.out.println("condition works
+
+in if tieupclientsint");
+
+tieupclientsint=1;
+}
+// System.out.println("tieupclients if
+
+"+tieupclientsint);
+uptieupcients=(int)tieupclientsint+binarytieupclients;
+
+}
+else{
+float row=-0.5f;
+float tieupclientsint
+
+=Integer.parseInt(tieupclients)%row;
+
+if(tieupclientsint==0.5||tieupclientsint==-0.5){
+
+// System.out.println("condition works
+
+in else tieupclientsint");
+
+tieupclientsint=1;
+}
+//System.out.println("tieupclients else
+
+"+tieupclientsint);
+uptieupcients=(int)tieupclientsint+binarytieupclients;
+
+}
+
+Statement stmtt = connection.createStatement();
+String sqlquery="UPDATE binarydb SET
+CUSTOMER='"+uptieupcients+"' where SNO='"+binaryprimarykey+"'";
+
+stmtt.executeUpdate(sqlquery);
+}
+if (binarycount+6 < binary.length()) {
+String brances=rs.getString("BRANCHES");
+int intbrances = Integer.parseInt(brances);
+String binarybrances =
+
+Integer.toBinaryString(intbrances);
+
+///////////////////////
+usertesingstring=usertesingstring+"*"+brances;
+
+/////////////////////////////////////////
+
+String
+
+temp6=binary.substring(binarycount+6,binarycount+7);
+
+if(temp6.equals("1"))
+{
+float row=1.5f;
+float brancesint
+
+=Integer.parseInt(brances)%row;
+
+if(brancesint==0.5||brancesint==-0.5){
+//System.out.println("condition works
+
+in if brancesint");
+
+brancesint=1;
+}
+//System.out.println("brancesint if
+
+"+brancesint);
+
+upbranches=(int)brancesint+binarybrances;
+}
+else{
+float row=-0.5f;
+float brancesint
+
+=Integer.parseInt(brances)%row;
+
+if(brancesint==0.5||brancesint==-0.5){
+//System.out.println("condition works
+
+in else brancesint");
+
+brancesint=1;
+}
+//System.out.println("brancesint else
+
+"+brancesint);
+
+upbranches=(int)brancesint+binarybrances;
+}
+Statement stmtt = connection.createStatement();
+String sqlquery="UPDATE binarydb SET
+
+BRANCHES='"+upbranches+"' where SNO='"+binaryprimarykey+"'";
+
+stmtt.executeUpdate(sqlquery);
+}
+
+if (binarycount+7 < binary.length()) {
+String
+
+rentalexp=rs.getString("RENTALEXPENSES");
+
+float floatrent = Float.parseFloat(rentalexp);
+int intrent = Float.floatToIntBits(floatrent);
+String binaryrent =
+
+Integer.toBinaryString(intrent);
+
+///////////////////////
+usertesingstring=usertesingstring+"*"+rentalexp;
+
+/////////////////////////////////////////
+
+String
+
+temp7=binary.substring(binarycount+7,binarycount+8);
+
+if(temp7.equals("1"))
+{
+// int row=2;
+float row=1.5f;
+float rentalint =floatrent%row;
+if(rentalint==0.5||rentalint==-0.5){
+//System.out.println("condition works
+
+in if rentalint");
+
+rentalint=1;
+}
+//System.out.println("rentalint if
+
+"+rentalint);
+
+uprentalexp=(int)rentalint+binaryrent;
+// System.out.println("\n rental if
+
+"+rentalint);
+
+}
+else{
+
+float row=-0.5f;
+float rentalint =floatrent%row;
+if(rentalint==0.5||rentalint==-0.5){
+// System.out.println("condition
+
+works in else rentalint");
+rentalint=1;
+}
+// System.out.println("rentalint else
+
+"+rentalint);
+uprentalexp=(int)rentalint+binaryrent;
+
+//System.out.println("\n rental if
+
+"+rentalint);
+
+}
+Statement stmtt = connection.createStatement();
+String sqlquery="UPDATE binarydb SET
+
+RENTALEXPENSES='"+uprentalexp+"' where
+SNO='"+binaryprimarykey+"'";
+
+stmtt.executeUpdate(sqlquery);
+}
+
+if (binarycount+8 < binary.length()) {
+String
+
+salryamount=rs.getString("SALARYAMOUNT_PA");
+
+float floatsalryamount =
+
+Float.parseFloat(salryamount);
+
+int intsalryamount =
+
+Float.floatToIntBits(floatsalryamount);
+
+String binarysalryamount =
+
+Integer.toBinaryString(intsalryamount);
+///////////////////////
+
+usertesingstring=usertesingstring+"*"+salryamount;
+/////////////////////////////////////////
+
+String
+
+temp8=binary.substring(binarycount+8,binarycount+9);
+
+if(temp8.equals("1"))
+{
+float row=1.5f;
+float salaryint =floatsalryamount%row;
+if(salaryint==0.5||salaryint==-0.5){
+// System.out.println("condition works
+
+in if salaryint");
+
+salaryint=1;
+}
+// System.out.println("salaryint if
+
+"+salaryint);
+upsalaryamount=(int)salaryint+binarysalryamount;
+
+}
+else{
+float row=-0.5f;
+float salaryint =floatsalryamount%row;
+if(salaryint==0.5||salaryint==-0.5){
+// System.out.println("condition works
+
+in else salaryint");
+
+salaryint=1;
+}
+// System.out.println("salaryint else
+
+"+salaryint);
+upsalaryamount=(int)salaryint+binarysalryamount;
+
+}
+Statement stmtt = connection.createStatement();
+String sqlquery="UPDATE binarydb SET
+
+SALARYAMOUNT_PA='"+upsalaryamount+"' where
+SNO='"+binaryprimarykey+"'";
+
+stmtt.executeUpdate(sqlquery);
+}
+
+if (binarycount+9 < binary.length()) {
+String
+
+otherexpenses=rs.getString("OTHER_EXPENSES_PA");
+
+float floatotherexpenses =
+
+Float.parseFloat(otherexpenses);
+
+int intotherexpenses =
+
+Float.floatToIntBits(floatotherexpenses);
+
+String binaryotherexpenses =
+
+Integer.toBinaryString(intotherexpenses);
+///////////////////////
+
+usertesingstring=usertesingstring+"*"+otherexpenses;
+
+/////////////////////////////////////////
+
+String
+
+temp9=binary.substring(binarycount+9,binarycount+10);
+
+if(temp9.equals("1"))
+{
+float row=1.5f;
+float otherexpensesint
+
+=floatotherexpenses%row;
+if(otherexpensesint==0.5||otherexpensesint==-0.5){
+
+// System.out.println("condition works
+
+in if otherexpensesint");
+
+otherexpensesint=1;
+}
+//System.out.println("otherexpensesint if
+
+"+otherexpensesint);
+upotherexpenses=(int)otherexpensesint+binaryotherexpenses;
+
+}
+else{
+float row=-0.5f;
+float otherexpensesint
+
+=floatotherexpenses%row;
+if(otherexpensesint==0.5||otherexpensesint==-0.5){
+
+//System.out.println("condition works
+
+in else otherexpensesint");
+
+otherexpensesint=1;
+}
+// System.out.println("otherexpensesint else
+
+"+otherexpensesint);
+
+upotherexpenses=(int)otherexpensesint+binaryotherexpenses;
+
+}
+Statement stmtt = connection.createStatement();
+String sqlquery="UPDATE binarydb SET
+
+OTHER_EXPENSES_PA='"+upotherexpenses+"' where
+SNO='"+binaryprimarykey+"'";
+
+stmtt.executeUpdate(sqlquery);
+}
+
+if (binarycount+10 < binary.length()) {
+String
+
+annualto=rs.getString("ANNUALTURNOVER");
+
+float floatannualto =
+
+Float.parseFloat(annualto);
+
+int intannualto =
+
+Float.floatToIntBits(floatannualto);
+
+String binaryannualto =
+
+Integer.toBinaryString(intannualto);
+///////////////////////
+usertesingstring=usertesingstring+"*"+annualto;
+
+/////////////////////////////////////////
+
+String
+
+temp10=binary.substring(binarycount+10,binarycount+11);
+
+if(temp10.equals("1"))
+{
+float row=1.5f;
+float annualturnint =floatannualto%row;
+
+if(annualturnint==0.5||annualturnint==-0.5){
+
+// System.out.println("condition works
+
+in if annualturnint");
+
+annualturnint=1;
+}
+// System.out.println("annualturnint if
+
+"+annualturnint);
+
+upannualturn=(int)annualturnint+binaryannualto;
+
+}
+else{
+float row=-0.5f;
+float annualturnint =floatannualto%row;
+
+if(annualturnint==0.5||annualturnint==-0.5){
+
+// System.out.println("condition works
+
+in else annualturnint");
+
+annualturnint=1;
+}
+// System.out.println("annualturnint else
+
+"+annualturnint);
+upannualturn=(int)annualturnint+binaryannualto;
+
+}
+Statement stmtt = connection.createStatement();
+String sqlquery="UPDATE binarydb SET
+
+ANNUALTURNOVER='"+upannualturn+"' where
+SNO='"+binaryprimarykey+"'";
+
+stmtt.executeUpdate(sqlquery);
+}
+if (binarycount+11 < binary.length()) {
+String profitloss=rs.getString("PROFIT/LOSS");
+float floatprofitloss =
+
+Float.parseFloat(profitloss);
+
+// out.println("float rental is "+floatrent);
+int intprofitloss =
+
+Float.floatToIntBits(floatprofitloss);
+
+binaryprofitloss =
+
+Integer.toBinaryString(intprofitloss);
+///////////////////////
+
+usertesingstring=usertesingstring+"*"+profitloss+"####";
+////////////////////////////////////////
+String
+
+temp11=binary.substring(binarycount+11,binarycount+12);
+
+if(temp11.equals("1"))
+
+{
+float row=1.5f;
+float profitlossint =floatprofitloss%row;
+
+if(profitlossint==0.5||profitlossint==-0.5){
+
+// System.out.println("condition works
+
+in if profitlossint");
+
+profitlossint=1;
+}
+// System.out.println("profitlossint if
+
+"+profitlossint);
+upprofitloss=(int)profitlossint+binaryprofitloss;
+if(upprofitloss.equals("")){
+System.out.println("null is exeuted");
+}
+}
+else{
+float row=-0.5f;
+float profitlossint =floatprofitloss%row;
+
+if(profitlossint==0.5||profitlossint==-0.5){
+
+// System.out.println("condition works
+
+in else profitlossint");
+
+profitlossint=1;
+}
+// System.out.println("profitlossint else
+
+"+profitlossint);
+upprofitloss=(int)profitlossint+binaryprofitloss;
+
+}
+if(upprofitloss.contains("-")){
+// System.out.println("upprofit before is
+
+"+upprofitloss);
+upprofitglob=upprofitloss.replace("-","").trim();
+
+//System.out.println("upprofit after is
+
+"+upprofitglob);
+}
+else{
+upprofitglob=upprofitloss;
+}
+if(upprofitglob.equals("")){
+System.out.println("null is exeuted");
+}
+Statement stmtt = connection.createStatement();
+String sqlquery="UPDATE binarydb SET
+PROFITLOSS='"+upprofitglob+"' where SNO='"+binaryprimarykey+"'";
+
+stmtt.executeUpdate(sqlquery);
+//}
+}
+if(binarycount < binary.length()){
+
+binarycount=binarycount+12;
+
+}
+
+}
+
+}//SECOND FOR LOOP CLOSE
+
+}//FIRST FOR LOOP CLOSE
+//System.out.println("final string is
+
+"+usertesingstring);
+}
+else{
+//out.println("process completed");
+}
+try{
+System.out.println(" SECOND connection exe");
+Vector list = new Vector();
+String sql = "select * from binarydb";
+ResultSet rs = stmt.executeQuery(sql);
+Vector temp;
+while (rs.next()) {
+temp = new Vector();
+for (int i = 1; i <= 13; i++) {
+if(i==1){
+int decimal =
+Integer.parseInt(rs.getString(i), 2);
+
+temp.add(decimal);
+}
+else{
+temp.add(rs.getString(i));
+}
+}
+list.add(temp);
+}
+preparedStatement =
+
+connection.prepareStatement(databaseStatement.updatefingertemp
+late());
+
+preparedStatement.setBytes(1,
+usertesingstring.toString().getBytes());
+preparedStatement.setString(2,
+
+Hmac.encrypt(str));
+
+preparedStatement.setString(3, username);
+preparedStatement.setString(4, userid);
+preparedStatement.executeUpdate();
+request.setAttribute("PARTITION", "EMBEDDING
+
+PROCESS HAS BEEN DONE");
+
+request.setAttribute("list", list);
+RequestDispatcher rd =
+request.getRequestDispatcher("Embedding.jsp");
+
+rd.forward(request, response);
+}
+
+catch(Exception e){
+e.printStackTrace();
+}
+}
+catch(Exception e)
+{
+e.printStackTrace();
+}
+}
+}
+Fetch
+package admin;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.util.Random;
+import java.util.Vector;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+public class fetch extends HttpServlet {
+
+Vector<String> rentalexpensesvec = new Vector<String>();
+Vector<String> salaryexpensesvec = new Vector<String>();
+Vector<String> otherexpensesvec = new Vector<String>();
+Vector<String> annualturnovervec = new Vector<String>();
+Random ran = new Random();
+int id=1;
+int
+year=0,employeecount=0,benchmarkempcount=0,totalempount=0,proj
+ectcount=0,tieupclientcount=0,branches=0;
+Double proloss=0.0;
+String
+rentalexpenses="",salaryamount="",otherexpenses="",status="",a
+nnualturn="";
+Connection connection ;
+Vector watermarkingbitvec;
+public String getRandomElement(Vector v) {
+Random generator = new Random();
+int rnd = generator.nextInt(v.size());
+
+return (String) v.get(rnd);
+}
+
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)throws ServletException,
+IOException {
+response.setContentType("text/html");
+// public void collection() {
+rentalexpensesvec.add("1.0");
+rentalexpensesvec.add("1.5");
+rentalexpensesvec.add("2.0");
+rentalexpensesvec.add("2.5");
+salaryexpensesvec.add("1.0");
+salaryexpensesvec.add("1.5");
+salaryexpensesvec.add("2.0");
+salaryexpensesvec.add("2.5");
+otherexpensesvec.add("0.5");
+otherexpensesvec.add("1.0");
+otherexpensesvec.add("1.5");
+annualturnovervec.add("2.0");
+annualturnovervec.add("2.5");
+annualturnovervec.add("3.0");
+annualturnovervec.add("3.5");
+annualturnovervec.add("4.0");
+annualturnovervec.add("4.5");
+annualturnovervec.add("5.5");
+annualturnovervec.add("6.5");
+annualturnovervec.add("7.5");
+annualturnovervec.add("8.0");
+annualturnovervec.add("8.5");
+annualturnovervec.add("9.0");
+annualturnovervec.add("9.5");
+
+// }
+
+// public void insertprocess() {
+try {
+
+connection = (Connection)
+getServletContext().getAttribute("connection");
+
+Statement stmt = connection.createStatement();
+for (year=1600; year<=2000; year++) {
+while (true) {
+employeecount = ran.nextInt(100);
+if (employeecount > 50 && employeecount
+
+<=100) {
+
+break;
+} else {
+
+}
+}
+System.out.println("employeecount
+
+is------>" + employeecount);
+
+while (true) {
+benchmarkempcount = ran.nextInt(50);
+if (benchmarkempcount > 10 &&
+
+benchmarkempcount <40) {
+break;
+} else {
+}
+}
+System.out.println("benchmarkempcount
+
+is------>" + benchmarkempcount);
+
+totalempount=employeecount+benchmarkempcount;
+
+System.out.println("TOTALEMP is------>" +
+
+totalempount);
+
+while (true) {
+projectcount = ran.nextInt(30);
+if (projectcount >10 && projectcount
+
+<29) {
+
+break;
+} else {
+}
+}
+System.out.println("projectcount
+
+is------>" + projectcount);
+
+while (true) {
+tieupclientcount = ran.nextInt(20);
+if (tieupclientcount >8 &&
+
+tieupclientcount <15) {
+break;
+} else {
+}
+}
+System.out.println("tieupclientcount
+
+is------>" +tieupclientcount);
+
+while (true) {
+branches = ran.nextInt(7);
+if (branches >2 && branches <=7) {
+break;
+} else {
+}
+
+}
+System.out.println("branches is------>"
+
++branches);
+
+rentalexpenses =
+
+getRandomElement(rentalexpensesvec);
+
+System.out.println("rentaexpenses
+
+is------>" +rentalexpenses);
+
+salaryamount=
+getRandomElement(salaryexpensesvec);
+
+System.out.println("salaryamount
+
+is------>" +salaryamount);
+
+otherexpenses=getRandomElement(otherexpensesvec);
+
+System.out.println("otherexpenses
+
+is------>" +otherexpenses);
+
+/* while (true) {
+annualturnover = ran.nextInt(10);
+if (annualturnover >2 &&
+
+annualturnover <=10) {
+break;
+} else {
+}
+}*/
+
+annualturn=getRandomElement(annualturnovervec);
+
+System.out.println("annualturnover
+
+is------>" +annualturn);
+
+proloss=Double.valueOf(annualturn)-(Double.valueOf(rentalexpen
+ses)+Double.valueOf(salaryamount)+Double.valueOf(otherexpenses)
+);//.(rentalexpenses)+Integer.parseInt(salaryamount)+Integer.p
+arseInt(otherexpenses));
+
+System.out.println("proloss is------>"
+
++proloss);
+
+String sql = ("insert into infotechdb
+
+values('"+id+"','" + year + "','" + employeecount + "','" +
+benchmarkempcount + "','" + totalempount + "','" + projectcount
++ "','" + tieupclientcount + "','" + branches +
+
+"','"+rentalexpenses+"','" + salaryamount + "','" + otherexpenses
++ "','" + annualturn + "','" + proloss + "')");
+
+stmt.executeUpdate(sql);
+System.out.println("row completed " +
+
+id);
+
+id++;
+}
+status="NUMERIC DATABASE HAS BEEN CREATED";
+request.setAttribute("FETCH", status);
+RequestDispatcher rd =
+
+request.getRequestDispatcher("AdminSucess.jsp");
+
+rd.forward(request, response);
+} catch (Exception e) {
+System.out.println(e);
+}
+// }
+
+}
+
+}
+Tupleseselection
+package admin;
+import hashfuction.Md5hashfunction;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.util.Vector;
+import java.sql.ResultSet;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class tupleseselection extends HttpServlet {
+Connection connection ;
+
+int by=0;
+int vecount=0;
+Statement stmt ;
+String ks="1as"; //secret key
+Md5hashfunction md=new Md5hashfunction();
+Vector partitiongroupPKVEC;//=new Vector();
+Vector Thresoldvaluegroupvec;
+Vector <Vector>selectedtupelvectorpartition=new
+Vector<Vector>();
+Vector <Vector>rejectedtupelvectorpartition=new
+Vector<Vector>();
+
+public static Vector
+<Vector>selectedtupelwatermarkingvectorpartition=new
+Vector<Vector>();
+Vector <Vector>rejectedtupelwatermarkingvectorpartition=new
+Vector<Vector>();
+
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)
+
+throws ServletException, IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+try{
+connection = (Connection)
+getServletContext().getAttribute("connection");
+stmt = connection.createStatement();
+System.out.println("connection exe");
+
+partitiongroupPKVEC=datasetwatermark.partitiongroupprimarykeyv
+ector;
+Thresoldvaluegroupvec=datasetwatermark.PartitiongroupThresolsv
+e;
+
+//out.println("part size is
+
+"+partitiongroupPKVEC.size());
+
+selectedtupelvectorpartition=new Vector<Vector>();
+rejectedtupelvectorpartition=new Vector<Vector>();
+for(int i=0;i<partitiongroupPKVEC.size();i++)
+{
+Vector selectedtuplesvector=new Vector();
+Vector rejectedtuplesvector=new Vector();
+Vector subpartition=new Vector();
+subpartition=(Vector)partitiongroupPKVEC.get(i);
+Vector subpartitionThresoldvalue=new Vector();
+
+subpartitionThresoldvalue=(Vector)Thresoldvaluegroupvec.get(i)
+;
+
+for(int j=0;j<subpartition.size();j++)
+{
+String sql1="select * from infotechdb where
+
+SNO="+subpartition.get(j);
+
+ResultSet rs = stmt.executeQuery(sql1);
+while(rs.next())
+{
+String year=rs.getString("YEAR");
+String activeemp=rs.getString("STAFF");
+String
+
+benchmarkemp=rs.getString("VECHICLE");
+
+String totemp=rs.getString("MATERIAL");
+String
+
+projectcount=rs.getString("DAMAGE");
+
+String
+
+tieupclients=rs.getString("CUSTOMER");
+
+String brances=rs.getString("BRANCHES");
+String
+
+rentalexp=rs.getString("RENTALEXPENSES");
+
+String
+
+salryamount=rs.getString("SALARYAMOUNT_PA");
+
+String
+
+otherexpenses=rs.getString("OTHER_EXPENSES_PA");
+
+String
+
+annualto=rs.getString("ANNUALTURNOVER");
+
+String
+
+profitloss=rs.getString("PROFIT/LOSS");
+
+// out.println("year is
+
+"+Double.valueOf(activeemp));
+
+//out.println("first elemnt is
+
+"+subpartitionThresoldvalue.get(1));
+
+if(Double.valueOf(year)>(Double)
+
+subpartitionThresoldvalue.get(0)){
+
+//System.out.println("condition true");
+
+selectedtuplesvector.add(subpartition.get(j));
+
+}
+else if(Double.valueOf(activeemp)>(Double)
+
+subpartitionThresoldvalue.get(1)){
+
+selectedtuplesvector.add(subpartition.get(j));
+
+}
+
+else
+
+if(Double.valueOf(benchmarkemp)>(Double)
+subpartitionThresoldvalue.get(2)){
+
+selectedtuplesvector.add(subpartition.get(j));
+
+}
+else if(Double.valueOf(totemp)>(Double)
+
+subpartitionThresoldvalue.get(3)){
+
+selectedtuplesvector.add(subpartition.get(j));
+
+}
+else
+
+if(Double.valueOf(projectcount)>(Double)
+subpartitionThresoldvalue.get(4)){
+selectedtuplesvector.add(subpartition.get(j));
+
+}
+else
+
+if(Double.valueOf(tieupclients)>(Double)
+subpartitionThresoldvalue.get(5)){
+
+selectedtuplesvector.add(subpartition.get(j));
+
+}
+else if(Double.valueOf(brances)>(Double)
+
+subpartitionThresoldvalue.get(6)){
+
+selectedtuplesvector.add(subpartition.get(j));
+
+}
+else if(Double.valueOf(rentalexp)>(Double)
+
+subpartitionThresoldvalue.get(7)){
+
+selectedtuplesvector.add(subpartition.get(j));
+
+}
+else
+
+if(Double.valueOf(salryamount)>(Double)
+subpartitionThresoldvalue.get(8)){
+selectedtuplesvector.add(subpartition.get(j));
+
+}
+
+else
+
+if(Double.valueOf(otherexpenses)>(Double)
+subpartitionThresoldvalue.get(9)){
+selectedtuplesvector.add(subpartition.get(j));
+
+}
+else if(Double.valueOf(annualto)>(Double)
+
+subpartitionThresoldvalue.get(10)){
+
+selectedtuplesvector.add(subpartition.get(j));
+
+}
+else if(Double.valueOf(profitloss)>(Double)
+
+subpartitionThresoldvalue.get(11)){
+
+selectedtuplesvector.add(subpartition.get(j));
+
+}
+else{
+
+rejectedtuplesvector.add(subpartition.get(j));
+
+}
+}
+
+}
+// out.println("group separated at "+i);
+
+selectedtupelvectorpartition.add(selectedtuplesvector);
+rejectedtupelvectorpartition.add(rejectedtuplesvector);
+
+}
+// out.println("selectedtupelvectorpartition vector size
+is "+selectedtupelvectorpartition.size());
+
+selectedtupelwatermarkingvectorpartition=new
+
+Vector<Vector>();
+
+rejectedtupelwatermarkingvectorpartition=new
+
+Vector<Vector>();
+
+//select tuple for watermarking
+for(int
+
+a=0;a<selectedtupelvectorpartition.size();a++){
+
+Vector selectedtuplewatermarking=new Vector();
+Vector Notselectedtuplewatermarking=new Vector();
+Vector selectedtuple=new Vector();
+
+selectedtuple=selectedtupelvectorpartition.get(a);
+for(int b=0;b<selectedtuple.size();b++){
+String pk=(String)selectedtuple.get(b);
+String hashfun=md.MD5(ks+pk);
+BigInteger bi = new BigInteger(hashfun, 16);
+BigInteger Even_Value=bi.mod(new
+
+BigInteger("2"));
+
+// System.out.println("mod result are
+
+"+Even_Value);
+
+if(Even_Value.longValue()>0){
+selectedtuplewatermarking.add(pk);
+
+}
+else{
+Notselectedtuplewatermarking.add(pk);
+}
+}
+//out.println("group separated at "+a);
+//out.println("selectedtuplewatermarking size is
+
+"+selectedtuplewatermarking.size());
+selectedtupelwatermarkingvectorpartition.add(selectedtuplewate
+rmarking);
+rejectedtupelwatermarkingvectorpartition.add(Notselectedtuplew
+atermarking);
+}
+//out.println("first vector is
+"+selectedtupelwatermarkingvectorpartition.get(0).size());
+
+for(int
+
+h=0;h<selectedtupelwatermarkingvectorpartition.size();h++){
+
+Vector v=new Vector();
+v=selectedtupelvectorpartition.get(h);
+//System.out.println(h+" iteration size is
+
+"+v.size());
+
+//System.out.println(h+" iteration size is
+
+"+v.size()*12);
+
+int k=v.size()*12;
+vecount=vecount+k;
+}
+//System.out.println("conditin works-----");
+if(partitiongroupPKVEC.size()==0){
+request.setAttribute("PARTITION", "Thresold Not Yet
+
+Calculated");
+
+RequestDispatcher rd =
+request.getRequestDispatcher("Adminpartitionprocess.jsp");
+
+rd.forward(request, response);
+}
+else{
+// System.out.println("total attribute count is
+
+"+vecount);
+
+request.setAttribute("PARTITION", "TUPLE SELECTION
+
+PRIMARY KEYS");
+
+request.setAttribute("list",
+
+selectedtupelvectorpartition);
+
+request.setAttribute("PARTITIONa", "TUPLE REJECTION
+
+PRIMARY KEYS");
+
+request.setAttribute("lista",
+rejectedtupelvectorpartition);//ggjhgjhgjhg
+
+request.setAttribute("PARTITION1", "TUPLE SELECTION
+
+FOR WATERMARKING PRIMARY KEYS");
+request.setAttribute("list1",
+selectedtupelwatermarkingvectorpartition);
+
+request.setAttribute("PARTITION2", "TUPLE REJECTION
+
+FOR WATERMARKING PRIMARY KEYS");
+request.setAttribute("list2",
+rejectedtupelwatermarkingvectorpartition);
+
+RequestDispatcher rd =
+
+request.getRequestDispatcher("Adminpartitionprocess.jsp");
+
+rd.forward(request, response);
+}
+}
+
+catch(Exception e){
+e.printStackTrace();
+}
+}
+
+}
+Viewemb
+package admin;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.text.DecimalFormat;
+import java.util.Random;
+import java.util.Vector;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+public class viewemb extends HttpServlet {
+Connection connection ;
+Statement stmt ;
+Vector<String> randomvalue = new Vector<String>();
+public String getRandomElement(Vector v) {
+Random generator = new Random();
+int rnd = generator.nextInt(v.size());
+// System.out.println("rnd values is "+rnd);
+return (String) v.get(rnd);
+}
+
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)throws ServletException,
+IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+try{
+randomvalue.add("5.2");
+randomvalue.add("6.7");
+randomvalue.add("8.2");
+randomvalue.add("7.7");
+randomvalue.add("3.0");
+randomvalue.add("2.2");
+connection = (Connection)
+getServletContext().getAttribute("connection");
+stmt = connection.createStatement();
+System.out.println("connection exe");
+Vector list = new Vector();
+String sql="select * from binarydb";
+ResultSet rs = stmt.executeQuery(sql);
+Vector tempp;
+while(rs.next())
+{
+tempp = new Vector();
+for(int i = 1; i <= 13; i++){
+// tempp.add(rs.getString(i));
+if(i<=8){
+int decimal =
+Integer.parseInt(rs.getString(i), 2);
+
+//System.out.println("decimal value is
+
+"+decimal+" i value is "+i);
+tempp.add(decimal);
+}
+
+else{
+long b = Long.parseLong(rs.getString(i), 2);
+int intBits5 = (int) b;
+float decodefloat =
+
+Float.intBitsToFloat(intBits5);
+
+// System.out.println("decodefloat value is
+
+"+decodefloat+" i value is "+i);
+
+String str = String.valueOf(decodefloat);
+if(str.equalsIgnoreCase("Infinity"))
+{
+System.out.println("Infinity is working");
+String value = getRandomElement(randomvalue);
+decodefloat= Float.parseFloat(value);
+//tempp.add(decodefloat);
+}
+if(str.equalsIgnoreCase("1.7014118E38")){
+System.out.println("1.7014118E38 is
+
+working");
+
+String value = getRandomElement(randomvalue);
+decodefloat= Float.parseFloat(value);
+//tempp.add(decodefloat);
+
+}
+tempp.add(decodefloat);
+if(str.equalsIgnoreCase("1.7014118E38")){
+System.out.println("vector checking
+
+"+tempp);
+
+}
+//System.out.println("decode float is
+
+"+decodefloat);
+
+}
+}
+list.add(tempp);
+}
+// System.out.println("list are "+list);
+request.setAttribute("PARTITION", "Encoded
+
+Database");
+
+request.setAttribute("list", list);
+RequestDispatcher rd =
+request.getRequestDispatcher("viewencoded.jsp");
+rd.forward(request, response);
+}
+
+catch(Exception e){
+e.printStackTrace();
+
+}
+}
+
+}
+Viewrecords
+package admin;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.util.Vector;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+public class viewrecords extends HttpServlet {
+Connection connection ;
+Statement stmt ;
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)throws ServletException,
+IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+String username=request.getParameter("username");
+String userid=request.getParameter("userid");
+try{
+connection = (Connection)
+getServletContext().getAttribute("connection");
+stmt = connection.createStatement();
+System.out.println("connection exe");
+Vector list = new Vector();
+String sql="select * from infotechdb";
+ResultSet rs = stmt.executeQuery(sql);
+ResultSetMetaData rm = rs.getMetaData();
+Vector metatemp = new Vector();
+int count = rm.getColumnCount();
+for(int i = 1; i <= count; i++){
+if("RENTALEXPENSES".equals(rm.getColumnName(i)))
+metatemp.add("RENTAL EXPENSES");
+
+else
+
+if("SALARYAMOUNT_PA".equals(rm.getColumnName(i)))
+
+metatemp.add("SALARY AMOUNT");
+else
+
+if("OTHER_EXPENSES_PA".equals(rm.getColumnName(i)))
+metatemp.add("OTHER EXPENSES");
+else
+
+if("ANNUALTURNOVER".equals(rm.getColumnName(i)))
+
+metatemp.add("ANNUAL TURNOVER");
+else
+metatemp.add(rm.getColumnName(i));
+
+}
+list.add(metatemp);
+Vector temp;
+while(rs.next())
+{
+temp = new Vector();
+for(int i = 1; i <= count; i++){
+temp.add(rs.getString(i));
+}
+list.add(temp);
+}
+// out.println("metatemp count is "+metatemp);
+//out.println("list count is "+list.get(0));
+request.setAttribute("PARTITION", "TUPLE HAS BEEN
+
+SEPARATED");
+
+request.setAttribute("list", list);
+RequestDispatcher rd =
+request.getRequestDispatcher("AdminSucess.jsp");
+rd.forward(request, response);
+}
+
+catch(Exception e){
+e.printStackTrace();
+}
+}
+
+}
+
+View records 1
+package admin;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSetMetaData;
+
+import java.sql.Statement;
+import java.util.Vector;
+import java.sql.ResultSet;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class viewrecords1 extends HttpServlet {
+Connection connection ;
+Statement stmt ;
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)
+
+throws ServletException, IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+String username=request.getParameter("username");
+String userid=request.getParameter("userid");
+try{
+
+connection = (Connection)
+getServletContext().getAttribute("connection");
+stmt = connection.createStatement();
+System.out.println("connection exe");
+Vector list = new Vector();
+String sql="select * from infotechdb";
+ResultSet rs = stmt.executeQuery(sql);
+ResultSetMetaData rm = rs.getMetaData();
+Vector metatemp = new Vector();
+int count = rm.getColumnCount();
+
+Vector temp;
+while(rs.next())
+{
+temp = new Vector();
+for(int i = 1; i <= count; i++){
+temp.add(rs.getString(i));
+}
+list.add(temp);
+}
+// out.println("metatemp count is "+metatemp);
+//out.println("list count is "+list.get(0));
+request.setAttribute("PARTITION", "ORIGINAL
+
+RECORDS");
+
+request.setAttribute("list", list);
+RequestDispatcher rd =
+request.getRequestDispatcher("viewencoded.jsp");
+rd.forward(request, response);
+
+}
+
+catch(Exception e){
+e.printStackTrace();
+}
+}
+
+}
+Com
+Logic
+Cannytest
+package com.logic;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Vector;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.awt.Color;
+import javax.imageio.ImageIO;
+class CannyEdgeDetector {
+
+private final static float GAUSSIAN_CUT_OFF = 0.005f;
+private final static float MAGNITUDE_SCALE = 100F;
+private final static float MAGNITUDE_LIMIT = 1000F;
+private final static int MAGNITUDE_MAX = (int) (MAGNITUDE_SCALE
+* MAGNITUDE_LIMIT);
+private int height;
+private int width;
+private int picsize;
+private int[] data;
+private int[] magnitude;
+private BufferedImage sourceImage;
+private BufferedImage edgesImage;
+private float gaussianKernelRadius;
+
+private float lowThreshold;
+private float highThreshold;
+private int gaussianKernelWidth;
+private boolean contrastNormalized;
+private float[] xConv;
+private float[] yConv;
+private float[] xGradient;
+private float[] yGradient;
+// constructors
+
+public CannyEdgeDetector() {
+lowThreshold = 2.5f;
+highThreshold = 7.5f;
+gaussianKernelRadius = 2f;
+gaussianKernelWidth = 16;
+contrastNormalized = false;
+}
+// accessors
+
+public BufferedImage getSourceImage() {
+return sourceImage;
+}
+
+public void setSourceImage(BufferedImage image) {
+sourceImage = image;
+}
+
+public BufferedImage getEdgesImage() {
+return edgesImage;
+}
+
+public void setEdgesImage(BufferedImage edgesImage) {
+this.edgesImage = edgesImage;
+}
+
+public float getLowThreshold() {
+return lowThreshold;
+}
+
+public void setLowThreshold(float threshold) {
+
+if (threshold < 0) throw new IllegalArgumentException();
+lowThreshold = threshold;
+}
+
+public float getHighThreshold() {
+return highThreshold;
+}
+
+public void setHighThreshold(float threshold) {
+if (threshold < 0) throw new IllegalArgumentException();
+highThreshold = threshold;
+}
+
+public int getGaussianKernelWidth() {
+return gaussianKernelWidth;
+}
+
+public void setGaussianKernelWidth(int gaussianKernelWidth) {
+if (gaussianKernelWidth < 2) throw new
+IllegalArgumentException();
+this.gaussianKernelWidth = gaussianKernelWidth;
+}
+
+public float getGaussianKernelRadius() {
+return gaussianKernelRadius;
+}
+
+public void setGaussianKernelRadius(float
+gaussianKernelRadius) {
+if (gaussianKernelRadius < 0.1f) throw new
+IllegalArgumentException();
+this.gaussianKernelRadius = gaussianKernelRadius;
+}
+
+public boolean isContrastNormalized() {
+return contrastNormalized;
+}
+
+public void setContrastNormalized(boolean contrastNormalized)
+{
+
+this.contrastNormalized = contrastNormalized;
+}
+// methods
+public void process() {
+width = sourceImage.getWidth();
+height = sourceImage.getHeight();
+picsize = width * height;
+initArrays();
+readLuminance();
+if (contrastNormalized) normalizeContrast();
+computeGradients(gaussianKernelRadius,
+gaussianKernelWidth);
+int low = Math.round(lowThreshold * MAGNITUDE_SCALE);
+int high = Math.round( highThreshold * MAGNITUDE_SCALE);
+performHysteresis(low, high);
+thresholdEdges();
+writeEdges(data);
+}
+// private utility methods
+private void initArrays() {
+if (data == null || picsize != data.length) {
+data = new int[picsize];
+magnitude = new int[picsize];
+xConv = new float[picsize];
+yConv = new float[picsize];
+xGradient = new float[picsize];
+yGradient = new float[picsize];
+}
+}
+
+private void computeGradients(float kernelRadius, int
+kernelWidth) {
+//generate the gaussian convolution masks
+float kernel[] = new float[kernelWidth];
+float diffKernel[] = new float[kernelWidth];
+int kwidth;
+for (kwidth = 0; kwidth < kernelWidth; kwidth++) {
+float g1 = gaussian(kwidth, kernelRadius);
+if (g1 <= GAUSSIAN_CUT_OFF && kwidth >= 2) break;
+float g2 = gaussian(kwidth - 0.5f, kernelRadius);
+float g3 = gaussian(kwidth + 0.5f, kernelRadius);
+kernel[kwidth] = (g1 + g2 + g3) / 3f / (2f * (float) Math.PI
+
+* kernelRadius * kernelRadius);
+
+diffKernel[kwidth] = g3 - g2;
+}
+int initX = kwidth - 1;
+int maxX = width - (kwidth - 1);
+int initY = width * (kwidth - 1);
+
+int maxY = width * (height - (kwidth - 1));
+//perform convolution in x and y directions
+for (int x = initX; x < maxX; x++) {
+for (int y = initY; y < maxY; y += width) {
+int index = x + y;
+float sumX = data[index] * kernel[0];
+float sumY = sumX;
+int xOffset = 1;
+int yOffset = width;
+for(; xOffset < kwidth ;) {
+sumY += kernel[xOffset] * (data[index - yOffset]
+
++ data[index + yOffset]);
+
+sumX += kernel[xOffset] * (data[index - xOffset]
+
++ data[index + xOffset]);
+
+yOffset += width;
+xOffset++;
+}
+yConv[index] = sumY;
+xConv[index] = sumX;
+}
+}
+for (int x = initX; x < maxX; x++) {
+for (int y = initY; y < maxY; y += width) {
+float sum = 0f;
+int index = x + y;
+for (int i = 1; i < kwidth; i++)
+sum += diffKernel[i] * (yConv[index - i] -
+
+yConv[index + i]);
+
+xGradient[index] = sum;
+}
+}
+for (int x = kwidth; x < width - kwidth; x++) {
+for (int y = initY; y < maxY; y += width) {
+float sum = 0.0f;
+int index = x + y;
+int yOffset = width;
+for (int i = 1; i < kwidth; i++) {
+sum += diffKernel[i] * (xConv[index - yOffset] -
+
+xConv[index + yOffset]);
+
+yOffset += width;
+}
+yGradient[index] = sum;
+}
+}
+initX = kwidth;
+maxX = width - kwidth;
+
+initY = width * kwidth;
+maxY = width * (height - kwidth);
+for (int x = initX; x < maxX; x++) {
+for (int y = initY; y < maxY; y += width) {
+int index = x + y;
+int indexN = index - width;
+int indexS = index + width;
+int indexW = index - 1;
+int indexE = index + 1;
+int indexNW = indexN - 1;
+int indexNE = indexN + 1;
+int indexSW = indexS - 1;
+int indexSE = indexS + 1;
+float xGrad = xGradient[index];
+float yGrad = yGradient[index];
+float gradMag = hypot(xGrad, yGrad);
+//perform non-maximal supression
+float nMag = hypot(xGradient[indexN],
+
+yGradient[indexN]);
+
+float sMag = hypot(xGradient[indexS],
+
+yGradient[indexS]);
+
+float wMag = hypot(xGradient[indexW],
+
+yGradient[indexW]);
+
+float eMag = hypot(xGradient[indexE],
+
+yGradient[indexE]);
+
+float neMag = hypot(xGradient[indexNE],
+
+yGradient[indexNE]);
+
+float seMag = hypot(xGradient[indexSE],
+
+yGradient[indexSE]);
+
+float swMag = hypot(xGradient[indexSW],
+
+yGradient[indexSW]);
+
+float nwMag = hypot(xGradient[indexNW],
+
+yGradient[indexNW]);
+
+float tmp;
+if (xGrad * yGrad <= (float) 0 /*(1)*/
+? Math.abs(xGrad) >= Math.abs(yGrad) /*(2)*/
+? (tmp = Math.abs(xGrad * gradMag)) >=
+Math.abs(yGrad * neMag - (xGrad + yGrad) * eMag) /*(3)*/
+
+&& tmp > Math.abs(yGrad * swMag - (xGrad +
+
+yGrad) * wMag) /*(4)*/
+
+: (tmp = Math.abs(yGrad * gradMag)) >=
+Math.abs(xGrad * neMag - (yGrad + xGrad) * nMag) /*(3)*/
+
+&& tmp > Math.abs(xGrad * swMag - (yGrad +
+
+xGrad) * sMag) /*(4)*/
+
+: Math.abs(xGrad) >= Math.abs(yGrad) /*(2)*/
+? (tmp = Math.abs(xGrad * gradMag)) >=
+Math.abs(yGrad * seMag + (xGrad - yGrad) * eMag) /*(3)*/
+
+&& tmp > Math.abs(yGrad * nwMag + (xGrad -
+
+yGrad) * wMag) /*(4)*/
+
+: (tmp = Math.abs(yGrad * gradMag)) >=
+Math.abs(xGrad * seMag + (yGrad - xGrad) * sMag) /*(3)*/
+
+&& tmp > Math.abs(xGrad * nwMag + (yGrad -
+
+xGrad) * nMag) /*(4)*/
+
+) {
+magnitude[index] = gradMag >= MAGNITUDE_LIMIT ?
+
+MAGNITUDE_MAX : (int) (MAGNITUDE_SCALE * gradMag);
+
+} else {
+magnitude[index] = 0;
+}
+}
+}
+}
+private float hypot(float x, float y) {
+if (x == 0f) return y;
+if (y == 0f) return x;
+return (float) Math.sqrt(x * x + y * y);
+}
+private float gaussian(float x, float sigma) {
+return (float) Math.exp(-(x * x) / (2f * sigma * sigma));
+}
+private void performHysteresis(int low, int high) {
+Arrays.fill(data, 0);
+int offset = 0;
+for (int x = 0; x < width; x++) {
+for (int y = 0; y < height; y++) {
+if (data[offset] == 0 && magnitude[offset] >= high)
+
+{
+
+follow(x, y, offset, low);
+}
+offset++;
+}
+}
+}
+private void follow(int x1, int y1, int i1, int threshold) {
+int x0 = x1 == 0 ? x1 : x1 - 1;
+int x2 = x1 == width - 1 ? x1 : x1 + 1;
+int y0 = y1 == 0 ? y1 : y1 - 1;
+int y2 = y1 == height -1 ? y1 : y1 + 1;
+data[i1] = magnitude[i1];
+for (int x = x0; x <= x2; x++) {
+for (int y = y0; y <= y2; y++) {
+int i2 = x + y * width;
+if ((y != y1 || x != x1)
+&& data[i2] == 0
+&& magnitude[i2] >= threshold) {
+follow(x, y, i2, threshold);
+return;
+}
+}
+}
+}
+
+private void thresholdEdges() {
+for (int i = 0; i < picsize; i++) {
+data[i] = data[i] > 0 ? -1 : 0xff000000;
+}
+}
+private int luminance(float r, float g, float b) {
+return Math.round(0.299f * r + 0.587f * g + 0.114f * b);
+}
+private void readLuminance() {
+int type = sourceImage.getType();
+if (type == BufferedImage.TYPE_INT_RGB || type ==
+BufferedImage.TYPE_INT_ARGB) {
+int[] pixels = (int[])
+
+sourceImage.getData().getDataElements(0, 0, width, height, null);
+
+for (int i = 0; i < picsize; i++) {
+int p = pixels[i];
+int r = (p & 0xff0000) >> 16;
+int g = (p & 0xff00) >> 8;
+int b = p & 0xff;
+data[i] = luminance(r, g, b);
+}
+} else if (type == BufferedImage.TYPE_BYTE_GRAY) {
+byte[] pixels = (byte[])
+
+sourceImage.getData().getDataElements(0, 0, width, height, null);
+
+for (int i = 0; i < picsize; i++) {
+data[i] = (pixels[i] & 0xff);
+}
+} else if (type == BufferedImage.TYPE_USHORT_GRAY) {
+short[] pixels = (short[])
+
+sourceImage.getData().getDataElements(0, 0, width, height, null);
+
+for (int i = 0; i < picsize; i++) {
+data[i] = (pixels[i] & 0xffff) / 256;
+}
+} else if (type == BufferedImage.TYPE_3BYTE_BGR) {
+byte[] pixels = (byte[])
+
+sourceImage.getData().getDataElements(0, 0, width, height, null);
+
+int offset = 0;
+for (int i = 0; i < picsize; i++) {
+int b = pixels[offset++] & 0xff;
+int g = pixels[offset++] & 0xff;
+int r = pixels[offset++] & 0xff;
+data[i] = luminance(r, g, b);
+}
+} else {
+throw new IllegalArgumentException("Unsupported image
+
+type: " + type);
+}
+}
+private void normalizeContrast() {
+int[] histogram = new int[256];
+for (int i = 0; i < data.length; i++) {
+histogram[data[i]]++;
+}
+
+int[] remap = new int[256];
+int sum = 0;
+int j = 0;
+for (int i = 0; i < histogram.length; i++) {
+sum += histogram[i];
+int target = sum*255/picsize;
+for (int k = j+1; k <=target; k++) {
+remap[k] = i;
+}
+j = target;
+}
+for (int i = 0; i < data.length; i++) {
+data[i] = remap[data[i]];
+}
+}
+private void writeEdges(int pixels[]) {
+if (edgesImage == null) {
+edgesImage = new BufferedImage(width, height,
+
+BufferedImage.TYPE_INT_ARGB);
+}
+edgesImage.getWritableTile(0, 0).setDataElements(0, 0,
+width, height, pixels);
+}
+/*public void mainMethod() throws Exception
+{
+Vector inputFiles = new Vector();
+File f=new File("C:/h.txt");
+FileInputStream fis=new FileInputStream(f);
+BufferedReader br=new BufferedReader(new
+
+InputStreamReader(fis));
+
+String str=br.readLine();
+while(str!=null)
+{
+inputFiles.add(str);
+str=br.readLine();
+}
+FileOutputStream fff=new
+FileOutputStream("C:/h1.txt",false);
+for(int i=0;i<inputFiles.size();i++)
+{
+String ss=inputFiles.get(i).toString();
+BufferedImage bff=ImageIO.read(new File(ss));
+CannyEdgeDetector detector = new CannyEdgeDetector();
+detector.setLowThreshold(5.f);
+detector.setHighThreshold(10f);
+detector.setSourceImage(bff);
+detector.process();
+BufferedImage edges = detector.getEdgesImage();
+// String s=InitialPage.epath+"/"+(i+1)+".jpg";
+// ImageIO.write(edges, "JPG", new File(s));
+
+// String stt=s+"\n";
+// fff.write(stt.getBytes());
+}
+// Compare c=new Compare();
+//c.mainMethod();
+}*/
+}
+
+Login
+package com.logic;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Vector;
+import javax.imageio.ImageIO;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
+import database.DatabaseStatement;
+public class Login extends HttpServlet
+{
+String checkingstatus="";
+int count=0;
+Connection connection ;
+private static final long serialVersionUID = 1L;
+DatabaseStatement databaseStatement = new DatabaseStatement();
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)
+{
+try
+{
+String username=request.getParameter("username");
+String password=request.getParameter("password");
+
+connection = (Connection)
+getServletContext().getAttribute("connection");
+
+PreparedStatement preparedStatement =
+connection.prepareStatement(databaseStatement.checkUserName())
+;
+
+preparedStatement.setString(1, username);
+preparedStatement.setString(2, password);
+ResultSet resultSet = preparedStatement.executeQuery();
+if(resultSet.next())
+{
+
+request.setAttribute("status", username);
+RequestDispatcher rd =
+request.getRequestDispatcher("registersuccess.jsp");
+rd.forward(request, response);
+
+}
+else{
+request.setAttribute("status", "USENAME NOT IN
+
+DATABASE");
+
+RequestDispatcher rd = request
+.getRequestDispatcher("userlogin.jsp");
+rd.forward(request, response);
+//System.out.println("---Invalid Username and
+
+Password---");
+}
+}
+catch(Exception e){
+e.printStackTrace();
+}
+}
+}
+Managemodule
+package com.logic;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import database.DatabaseStatement;
+public class Managemodule extends HttpServlet {
+Connection connection = null;
+PreparedStatement preparedStatement = null;
+
+DatabaseStatement databaseStatement = new DatabaseStatement();
+public Managemodule() {
+super();
+}
+/**
+* Destruction of the servlet. <br>
+*/
+public void destroy() {
+super.destroy(); // Just puts "destroy" string in log
+// Put your code here
+}
+/**
+* The doGet method of the servlet. <br>
+*
+* This method is called when a form has its tag value method
+equals to get.
+*
+* @param request the request send by the client to the server
+* @param response the response send by the server to the client
+* @throws ServletException if an error occurred
+* @throws IOException if an error occurred
+*/
+public void doGet(HttpServletRequest request,
+HttpServletResponse response)
+
+throws ServletException, IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+out
+.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML
+
+4.01 Transitional//EN\">");
+out.println("<HTML>");
+out.println(" <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+out.println(" <BODY>");
+out.print(" This is ");
+out.print(this.getClass());
+out.println(", using the GET method");
+out.println(" </BODY>");
+out.println("</HTML>");
+out.flush();
+out.close();
+}
+/**
+* The doPost method of the servlet. <br>
+*
+* This method is called when a form has its tag value method
+equals to post.
+*
+* @param request the request send by the client to the server
+* @param response the response send by the server to the client
+* @throws ServletException if an error occurred
+* @throws IOException if an error occurred
+*/
+
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)
+
+throws ServletException, IOException {
+response.setContentType("text/html");
+String module =request.getParameter("module");
+String userid=request.getParameter("userid");
+String username=request.getParameter("username");
+try{
+connection = (Connection)
+
+getServletContext().getAttribute(
+
+"connection");
+if("module3".equalsIgnoreCase(module))
+{
+PreparedStatement preparedStatement =
+connection.prepareStatement(databaseStatement.checkUserid());
+preparedStatement.setString(1, username);
+preparedStatement.setString(2, userid);
+ResultSet resultSet =
+
+preparedStatement.executeQuery();
+if(resultSet.next())
+{
+String
+
+fp=(String)resultSet.getString("fingerprint");
+
+String
+
+fpt=(String)resultSet.getString("fingertemplate");
+if(fp!=null && fpt!=null){
+request.setAttribute("username", username);
+request.setAttribute("userid", userid);
+request.setAttribute("fingerprint", fp);
+request.setAttribute("fingertemplate", fpt);
+request.setAttribute("but", "CM");
+RequestDispatcher rd =
+
+request.getRequestDispatcher("fingerprint.jsp");
+
+rd.forward(request, response);
+}else
+{
+request.setAttribute("username", username);
+request.setAttribute("userid", userid);
+request.setAttribute("status", "Phase-I & II
+
+Pending..!");
+
+RequestDispatcher rd =
+
+request.getRequestDispatcher("home.jsp");
+
+rd.forward(request, response);
+}
+}else
+{
+request.setAttribute("username", username);
+request.setAttribute("userid", userid);
+request.setAttribute("status", "Phase-I & II
+
+Pending..!");
+
+RequestDispatcher rd =
+
+request.getRequestDispatcher("home.jsp");
+
+rd.forward(request, response);
+}
+
+}else
+{
+request.setAttribute("username", username);
+request.setAttribute("userid", userid);
+RequestDispatcher rd =
+request.getRequestDispatcher("AdminSucess.jsp");
+rd.forward(request, response);
+}
+}catch (Exception e) {
+e.printStackTrace();
+}
+}
+/**
+* Initialization of the servlet. <br>
+*
+* @throws ServletException if an error occurs
+*/
+public void init() throws ServletException {
+// Put your code here
+}
+}
+Register
+package com.logic;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Random;
+import javax.imageio.ImageIO;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import database.DatabaseStatement;
+import java.io.FileOutputStream;
+public class register extends HttpServlet {
+private static final long serialVersionUID = 1L;
+String userName = "";
+
+String userImage = "";
+Connection connection = null;
+PreparedStatement preparedStatement = null;
+DatabaseStatement databaseStatement = new DatabaseStatement();
+BufferedImage writeimage;
+public register() {
+super();
+}
+protected void doPost(HttpServletRequest request,
+HttpServletResponse response) throws ServletException,
+
+IOException {
+@SuppressWarnings("unused")
+String status = "";
+userName = request.getParameter("username");
+String userEmail = request.getParameter("mailid");
+String userAddress = request.getParameter("address");
+String userBirth = request.getParameter("hometown");
+String password = request.getParameter("password");
+Random ran=new Random();
+String userid=""+ran.nextInt(999999);
+try {
+connection = (Connection)
+
+getServletContext().getAttribute(
+
+"connection");
+System.out.println("this is connection--" + connection);
+preparedStatement =
+connection.prepareStatement(databaseStatement.checkUserName())
+;
+System.out.println("check username working");
+preparedStatement.setString(1, userName);
+preparedStatement.setString(2, password);
+ResultSet resultSet = preparedStatement.executeQuery();
+boolean b = resultSet.next();
+if (!b) {
+Statement stmt = connection.createStatement();
+String sql =("insert into ADMINGRAPHICALPASSWORD
+
+values('" + userName + "','" + userEmail + "','" + userAddress +
+"','"+userBirth+"','"+userImage+"')");
+stmt.executeUpdate(sql);
+preparedStatement = connection
+.prepareStatement(databaseStatement.insertUser());
+
+preparedStatement.setString(1, userName);
+preparedStatement.setString(2, userEmail);
+preparedStatement.setString(3, userAddress);
+preparedStatement.setString(4, userBirth);
+preparedStatement.setString(5, password);
+preparedStatement.setString(6, userid);
+preparedStatement.execute();
+request.setAttribute("status", status);
+
+request.setAttribute("username", userName);
+request.setAttribute("userid", userid);
+RequestDispatcher rd =
+request.getRequestDispatcher("fingerprint.jsp");
+/*RequestDispatcher rd =
+request.getRequestDispatcher("userlogin.jsp");*/
+rd.forward(request, response);
+} else {
+status = "UserName or Email Already Exits";
+request.setAttribute("status", status);
+RequestDispatcher rd =
+request.getRequestDispatcher("registration.jsp");
+rd.forward(request, response);
+}
+} catch (SQLException e) {
+e.printStackTrace();
+} catch (IOException e) {
+e.printStackTrace();
+}
+}
+public void imagewriting() throws IOException {
+CannyEdgeDetector detector = new CannyEdgeDetector();
+System.out.println("image path is " + userImage);
+String imagepath = userImage.replace("/", "\\");
+File ff = new File("webapps\\ReversibleWatermarking\\" +
+imagepath);
+BufferedImage stegnobuf = ImageIO.read(ff);
+System.out.println("reading process completed");
+detector.setSourceImage(stegnobuf);
+detector.process();
+BufferedImage edges = detector.getEdgesImage();
+
+File ff1 = new File("webapps/ReversibleWatermarking/" +
+userName);
+if (!ff1.exists()) {
+ff1.mkdir();
+}
+File ff2=new File("webapps/ReversibleWatermarking/" +
+userName+"/edgeimage.jpg");
+// File ff3=new File("webapps/GraphicalPassword/" +
+userName+"/edgeimage1.jpg");
+FileOutputStream ff3 = new
+FileOutputStream("webapps/ReversibleWatermarking/" +
+userName+"/edgeimage1.jpg");
+ImageIO.write(edges, "JPG", ff2);
+BufferedImage edgebuf = ImageIO.read((ff2));
+writeimage = new BufferedImage(edgebuf.getWidth(),
+edgebuf.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+for (int i = 0; i < edgebuf.getWidth(); i++) {
+
+for (int j = 0; j < edgebuf.getHeight(); j++) {
+int pixel = edgebuf.getRGB(i, j);
+writeimage.setRGB(i, j, pixel);
+}}
+ByteArrayOutputStream bas = new ByteArrayOutputStream();
+ImageIO.write(writeimage, "JPG", ff3);
+ff3.write(bas.toByteArray());
+bas.close();
+ff3.close();
+System.out.println("image write successfully");
+}
+}
+Updatefingerprint
+package com.logic;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import database.DatabaseStatement;
+public class Updatefingerprint extends HttpServlet {
+Connection connection = null;
+PreparedStatement preparedStatement = null;
+DatabaseStatement databaseStatement = new DatabaseStatement();
+public Updatefingerprint() {
+super();
+}
+/**
+* Destruction of the servlet. <br>
+*/
+public void destroy() {
+super.destroy(); // Just puts "destroy" string in log
+// Put your code here
+}
+/**
+* The doGet method of the servlet. <br>
+*
+* This method is called when a form has its tag value method
+equals to get.
+*
+
+* @param request the request send by the client to the server
+* @param response the response send by the server to the client
+* @throws ServletException if an error occurred
+* @throws IOException if an error occurred
+*/
+public void doGet(HttpServletRequest request,
+HttpServletResponse response)
+
+throws ServletException, IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+out
+.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML
+
+4.01 Transitional//EN\">");
+out.println("<HTML>");
+out.println(" <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+out.println(" <BODY>");
+out.print(" This is ");
+out.print(this.getClass());
+out.println(", using the GET method");
+out.println(" </BODY>");
+out.println("</HTML>");
+out.flush();
+out.close();
+}
+/**
+* The doPost method of the servlet. <br>
+*
+* This method is called when a form has its tag value method
+equals to post.
+*
+* @param request the request send by the client to the server
+* @param response the response send by the server to the client
+* @throws ServletException if an error occurred
+* @throws IOException if an error occurred
+*/
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)
+
+throws ServletException, IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+String userid=request.getParameter("userid");
+String username=request.getParameter("username");
+String fingerprint=request.getParameter("txttemplate");
+try{
+connection = (Connection)
+
+getServletContext().getAttribute(
+
+"connection");
+String status="";
+if(!"".equals(fingerprint))
+{
+preparedStatement =
+
+connection.prepareStatement(databaseStatement.updatefingerprin
+t());
+
+preparedStatement.setString(1, fingerprint);
+preparedStatement.setString(2, username);
+preparedStatement.setString(3, userid);
+preparedStatement.executeUpdate();
+status="AUTHORISED USER";
+request.setAttribute("status", status);
+RequestDispatcher rd =
+request.getRequestDispatcher("AdminSucess.jsp");
+rd.forward(request, response);
+}else
+{
+request.setAttribute("username", username);
+request.setAttribute("userid", userid);
+status = "Finger Print Missing..!";
+request.setAttribute("status", status);
+RequestDispatcher rd =
+request.getRequestDispatcher("registration.jsp");
+rd.forward(request, response);
+}
+}catch (Exception e) {
+e.printStackTrace();
+}
+}
+public void init() throws ServletException {
+// Put your code here
+}
+}
+Database
+databaseconnection
+package database;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Properties;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+public class DatabaseConnection implements ServletContextListener
+{
+Connection connection = null;
+
+PreparedStatement preparedStatement = null;
+public void contextDestroyed(ServletContextEvent arg0) {
+try {
+System.out.println("Connection Closed
+Success----for--HistogramShiftWatermarking-------");
+
+deleterecords();
+connection.close();
+} catch (SQLException e) {
+e.printStackTrace();
+}
+}
+public void contextInitialized(ServletContextEvent arg0) {
+ServletContext servletContext = arg0.getServletContext();
+try {
+Class.forName("com.mysql.jdbc.Driver");
+connection =
+
+DriverManager.getConnection("jdbc:mysql://localhost/hsw","root
+","root");
+
+servletContext.setAttribute("connection",
+
+connection);
+
+System.out.println("Connection Create
+Success----for--HistogramShiftWatermarking-------------------")
+;
+} catch (ClassNotFoundException e) {
+e.printStackTrace();
+} catch (SQLException e) {
+e.printStackTrace();
+}
+}
+public void deleterecords()
+{
+try
+{
+System.out.println("================Records deleted
+
+for HistogramShift Watermarking===========");
+
+preparedStatement=connection.prepareStatement("delete
+
+from infotechdb");
+
+preparedStatement.execute();
+preparedStatement=connection.prepareStatement("delete
+
+from binarydb");
+
+preparedStatement.execute();
+}catch (Exception e) {
+e.printStackTrace();
+}
+
+}
+}
+
+Databasestatements
+package database;
+import java.sql.Connection;
+import java.sql.Statement;
+import javax.servlet.http.HttpServlet;
+public class DatabaseStatement extends HttpServlet {
+private static final long serialVersionUID = 1L;
+public static DatabaseStatement databaseStatement = new
+DatabaseStatement();
+Statement statement = null;
+Connection connection = null;
+String sql = "";
+public static synchronized DatabaseStatement
+getDatabaseStatement() {
+return databaseStatement;
+}
+public String checkUserName() {
+sql = "Select username,userid from registration where
+userName=? and password=?";
+return sql;
+}
+public String insertUser() {
+sql = "insert into
+registration(userName,userEmail,userAddress,userBirth,password,
+userid) values(?,?,?,?,?,?)";
+return sql;
+}
+public String checknull(){
+sql = "SELECT YEAR FROM binaryinfotechstatus";
+return sql;
+
+}
+public String updatefingerprint() {
+sql = "update registration set fingerprint=? where userName=?
+and userid=?";
+return sql;
+}
+public String updatefingertemplate() {
+sql = "update registration set secretkey=?,fingertemplate=?
+where userName=? and userid=?";
+return sql;
+}
+
+public String checkUserid() {
+sql = "Select
+username,userid,fingerprint,fingertemplate,secretkey from
+registration where userName=? and userid=?";
+return sql;
+}
+}
+Hashfuntion
+Binaryconversion
+package hashfuction;
+
+public class binaryconverstion {
+
+public String toBinary( byte[] bytes )
+{
+StringBuilder binary = new StringBuilder();
+int count=0;
+for (byte b : bytes)
+{
+int val = b;
+for (int i = 0; i < 8; i++)
+{
+binary.append((val & 128) == 0 ? 0 : 1);
+val <<= 1;
+count++;
+}
+}
+return binary.toString();
+}
+public byte[] fromBinary( String s )
+{
+int sLen = s.length();
+byte[] toReturn = new byte[(sLen + Byte.SIZE - 1) /
+Byte.SIZE];
+char c;
+for( int i = 0; i < sLen; i++ )
+if( (c = s.charAt(i)) == '1' )
+toReturn[i / Byte.SIZE] = (byte) (toReturn[i /
+
+Byte.SIZE] | (0x80 >>> (i % Byte.SIZE)));
+else if ( c != '0' )
+throw new IllegalArgumentException();
+return toReturn;
+}
+
+}
+
+Hmac
+package hashfuction;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import
+com.sun.xml.internal.messaging.saaj.packaging.mime.util.BASE64
+DecoderStream;
+import
+com.sun.xml.internal.messaging.saaj.packaging.mime.util.BASE64
+EncoderStream;
+
+public class Hmac {
+
+private static Cipher ecipher;
+private static Cipher dcipher;
+private static SecretKey key;
+static{
+try {
+// generate secret key using DES algorithm
+key = KeyGenerator.getInstance("DES").generateKey();
+ecipher = Cipher.getInstance("DES");
+dcipher = Cipher.getInstance("DES");
+// initialize the ciphers with the given key
+ecipher.init(Cipher.ENCRYPT_MODE, key);
+dcipher.init(Cipher.DECRYPT_MODE, key);
+}
+catch (NoSuchAlgorithmException e) {
+
+System.out.println("No Such Algorithm:" +
+
+e.getMessage());
+}
+catch (NoSuchPaddingException e) {
+System.out.println("No Such Padding:" +
+
+e.getMessage());
+}
+catch (InvalidKeyException e) {
+System.out.println("Invalid Key:" + e.getMessage());
+}
+}
+public static String encrypt(String str) {
+try {
+// encode the string into a sequence of bytes using the
+
+named charset
+
+// storing the result into a new byte array.
+byte[] utf8 = str.getBytes("UTF8");
+byte[] enc = ecipher.doFinal(utf8);
+// encode to base64
+enc = BASE64EncoderStream.encode(enc);
+return new String(enc);
+}
+catch (Exception e) {
+e.printStackTrace();
+}
+return null;
+}
+public static String decrypt(String str) {
+try {
+// decode with base64 to get bytes
+byte[] dec = BASE64DecoderStream.decode(str.getBytes());
+byte[] utf8 = dcipher.doFinal(dec);
+// create new string based on the specified charset
+
+return new String(utf8, "UTF8");
+}
+catch (Exception e) {
+e.printStackTrace();
+}
+return null;
+}
+}
+Md5hashfuntion
+package hashfuction;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+public class Md5hashfunction
+{
+private static String convertedToHex(byte[] data)
+{
+StringBuffer buf = new StringBuffer();
+for (int i = 0; i < data.length; i++)
+{
+int halfOfByte = (data[i] >>> 4) & 0x0F;
+int twoHalfBytes = 0;
+do
+{
+if ((0 <= halfOfByte) && (halfOfByte <= 9))
+{
+buf.append( (char) ('0' + halfOfByte) );
+}
+else
+{
+buf.append( (char) ('a' + (halfOfByte - 10)) );
+}
+halfOfByte = data[i] & 0x0F;
+} while(twoHalfBytes++ < 1);
+}
+return buf.toString();
+}
+public static String MD5(String text) throws
+NoSuchAlgorithmException, UnsupportedEncodingException
+
+{
+MessageDigest md;
+md = MessageDigest.getInstance("MD5");
+byte[] md5 = new byte[64];
+md.update(text.getBytes("iso-8859-1"), 0, text.length());
+md5 = md.digest();
+return convertedToHex(md5);
+}
+
+/* public static void main(String args[]) throws
+NoSuchAlgorithmException, UnsupportedEncodingException{
+Md5hashfunction de=new Md5hashfunction();
+String result=de.MD5("maria");
+System.out.println("md5 content is "+result);
+}*/
+}
+
+User
+Complaint
+package user;
+import java.io.IOException;
+import database.DatabaseStatement;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+public class complaint extends HttpServlet {
+Connection connection = null;
+String username,emailid,address,hometownadmin,imagename;
+PreparedStatement preparedStatement = null;
+DatabaseStatement databaseStatement = new DatabaseStatement();
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)
+
+throws ServletException, IOException {
+response.setContentType("text/html");
+
+String userName = request.getParameter("username");
+String hometown = request.getParameter("hometown");
+System.out.println("username is -----------> "+userName);
+System.out.println("hometown is -----------> "+hometown);
+
+try{
+connection = (Connection)
+getServletContext().getAttribute(
+"connection");
+
+preparedStatement =
+
+connection.prepareStatement(databaseStatement.checkUserName())
+;
+
+System.out.println("check username working");
+preparedStatement.setString(1, userName);
+ResultSet resultSet =
+
+preparedStatement.executeQuery();
+boolean b = resultSet.next();
+if (b) {
+String result="ACCOUNT IS ALREADY ACTIVE NO NEED FOR
+
+RECOVERY";
+
+System.out.println("result is--------->"+result);
+request.setAttribute("status",result);
+RequestDispatcher rd1 = request
+.getRequestDispatcher("complaint.jsp");
+rd1.forward(request, response);
+
+}
+else{
+PreparedStatement ps=connection.prepareStatement("SELECT
+* FROM admingraphicalpassword where USERNAME='"+userName+"'");
+ResultSet rs=ps.executeQuery();
+while(rs.next()){
+username=rs.getString(1);
+emailid=rs.getString(2);
+address=rs.getString(3);
+hometownadmin=rs.getString(4);
+imagename=rs.getString(5);
+}
+System.out.println("hometown--------"+hometownadmin);
+if(hometown.equalsIgnoreCase(hometownadmin))
+{
+System.out.println("security question correct");
+PreparedStatement
+
+ps1=connection.prepareStatement("insert into registration
+values('" + username + "','" + emailid + "','" + address +
+"','"+hometownadmin+"','"+imagename+"')");
+
+ps1.executeUpdate();
+System.out.println("your account has been unblocked");
+
+String result="ACCOUNT HAS BEEN RECOVRED";
+//ServletContext con1=getServletContext();
+request.setAttribute("status",result);
+RequestDispatcher rd1 = request
+.getRequestDispatcher("complaint.jsp");
+rd1.forward(request, response);
+}
+else{
+System.out.println("your security question is mismath pls
+check");
+String result="SECURITY QUESTION IS MISMATCHING";
+//ServletContext con1=getServletContext();
+request.setAttribute("status",result);
+RequestDispatcher rd1 =
+request.getRequestDispatcher("complaint.jsp");
+rd1.forward(request, response);
+}
+}
+}
+
+catch(Exception e)
+{
+e.printStackTrace();
+}
+}
+
+}
+Userviewemb
+package user;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.text.DecimalFormat;
+import java.util.Random;
+import java.util.Vector;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+public class userviewemb extends HttpServlet {
+Connection connection ;
+
+Statement stmt ;
+Vector<String> randomvalue = new Vector<String>();
+public String getRandomElement(Vector v) {
+Random generator = new Random();
+int rnd = generator.nextInt(v.size());
+// System.out.println("rnd values is "+rnd);
+return (String) v.get(rnd);
+}
+
+public void doPost(HttpServletRequest request,
+HttpServletResponse response)
+
+throws ServletException, IOException {
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+try{
+randomvalue.add("5.2");
+randomvalue.add("6.7");
+randomvalue.add("8.2");
+randomvalue.add("7.7");
+randomvalue.add("3.0");
+randomvalue.add("2.2");
+connection = (Connection)
+getServletContext().getAttribute("connection");
+stmt = connection.createStatement();
+System.out.println("connection exe");
+Vector list = new Vector();
+String sql="select * from binarydb";
+ResultSet rs = stmt.executeQuery(sql);
+Vector tempp;
+while(rs.next())
+{
+tempp = new Vector();
+for(int i = 1; i <= 13; i++){
+// tempp.add(rs.getString(i));
+if(i<=8){
+int decimal =
+Integer.parseInt(rs.getString(i), 2);
+
+//System.out.println("decimal value is
+
+"+decimal+" i value is "+i);
+tempp.add(decimal);
+}
+else{
+long b = Long.parseLong(rs.getString(i), 2);
+int intBits5 = (int) b;
+float decodefloat =
+
+Float.intBitsToFloat(intBits5);
+
+// System.out.println("decodefloat value is
+
+"+decodefloat+" i value is "+i);
+
+String str = String.valueOf(decodefloat);
+if(str.equalsIgnoreCase("Infinity"))
+{
+System.out.println("Infinity is working");
+String value = getRandomElement(randomvalue);
+decodefloat= Float.parseFloat(value);
+//tempp.add(decodefloat);
+}
+if(str.equalsIgnoreCase("1.7014118E38")){
+System.out.println("1.7014118E38 is
+
+working");
+
+String value = getRandomElement(randomvalue);
+decodefloat= Float.parseFloat(value);
+//tempp.add(decodefloat);
+
+}
+tempp.add(decodefloat);
+if(str.equalsIgnoreCase("1.7014118E38")){
+System.out.println("vector checking
+
+"+tempp);
+
+}
+//System.out.println("decode float is
+
+"+decodefloat);
+
+}
+}
+list.add(tempp);
+}
+// System.out.println("list are "+list);
+request.setAttribute("PARTITION", "Encoded
+
+Database");
+
+request.setAttribute("list", list);
+RequestDispatcher rd =
+request.getRequestDispatcher("registersuccess.jsp");
+rd.forward(request, response);
+}
+
+catch(Exception e){
+e.printStackTrace();
+}
+}
+
+}

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	
+	 <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>adminlogin</servlet-name>
+    <servlet-class>admin.adminlogin</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>fetch</servlet-name>
+    <servlet-class>admin.fetch</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>viewrecords</servlet-name>
+    <servlet-class>admin.viewrecords</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>datapartition</servlet-name>
+    <servlet-class>admin.datapartition</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>datasetwatermark</servlet-name>
+    <servlet-class>admin.datasetwatermark</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>tupleseselection</servlet-name>
+    <servlet-class>admin.tupleseselection</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>embedding</servlet-name>
+    <servlet-class>admin.embedding</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>viewemb</servlet-name>
+    <servlet-class>admin.viewemb</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>viewrecords1</servlet-name>
+    <servlet-class>admin.viewrecords1</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>binary</servlet-name>
+    <servlet-class>admin.binary</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>register</servlet-name>
+    <servlet-class>com.logic.register</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>Login</servlet-name>
+    <servlet-class>com.logic.Login</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>decoding</servlet-name>
+    <servlet-class>user.decoding</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>userviewemb</servlet-name>
+    <servlet-class>user.userviewemb</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>complaint</servlet-name>
+    <servlet-class>user.complaint</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>Updatefingerprint</servlet-name>
+    <servlet-class>com.logic.Updatefingerprint</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>Managemodule</servlet-name>
+    <servlet-class>com.logic.Managemodule</servlet-class>
+  </servlet>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <servlet-mapping>
+    <servlet-name>adminlogin</servlet-name>
+    <url-pattern>/adminlogin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>fetch</servlet-name>
+    <url-pattern>/fetch</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>viewrecords</servlet-name>
+    <url-pattern>/viewrecords</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>datapartition</servlet-name>
+    <url-pattern>/datapartition</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>datasetwatermark</servlet-name>
+    <url-pattern>/datasetwatermark</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>tupleseselection</servlet-name>
+    <url-pattern>/tupleseselection</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>embedding</servlet-name>
+    <url-pattern>/embedding</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>viewemb</servlet-name>
+    <url-pattern>/viewemb</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>viewrecords1</servlet-name>
+    <url-pattern>/viewrecords1</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>binary</servlet-name>
+    <url-pattern>/binary</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>register</servlet-name>
+    <url-pattern>/register</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Login</servlet-name>
+    <url-pattern>/Login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>decoding</servlet-name>
+    <url-pattern>/decoding</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>userviewemb</servlet-name>
+    <url-pattern>/userviewemb</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>complaint</servlet-name>
+    <url-pattern>/complaint</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Updatefingerprint</servlet-name>
+    <url-pattern>/Updatefingerprint</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Managemodule</servlet-name>
+    <url-pattern>/Managemodule</url-pattern>
+  </servlet-mapping>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <listener>
+		<listener-class>database.DatabaseConnection</listener-class>
+	</listener>
+	
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>
